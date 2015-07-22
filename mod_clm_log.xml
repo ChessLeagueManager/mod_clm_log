@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<install type="module" version="1.7.0" client="site" method="upgrade">
+	<name>CLM Login Modul</name>
+	<author>Thomas Schwietert</author>
+	<creationDate>11.06.2015</creationDate>
+	<copyright>(C) 2008 - 2015 CLM Project All rights reserved.</copyright>
+	<license>GNU/GPL</license>
+	<authorEmail>fishpoke@fishpoke.de</authorEmail>
+	<authorUrl>www.chessleaguemanager.de</authorUrl>
+	<version>1.2.2</version>
+	<description>
+		<![CDATA[
+			 <h3>Chess League Manager : Login Modul</h3>
+			 <p>Das Modul, welches die Frontend Funktionen für registrierte Nutzer der CLM Komponente zur Verfügung stellt.</p>
+			 <p><a target="_blank" href="http://www.chessleaguemanager.de">CLM Projekt Homepage</a></p>
+			 <p>&copy; Thomas Schwietert [<a target="_blank" href="http://www.sboo.de">www.sboo.de</a>] &amp; Andreas Dorn [<a target="_blank" href="http://www.sbbl.org">www.sbbl.org</a>]</p>
+			 ]]>
+	</description>
+	<files>
+		<filename module="mod_clm_log">mod_clm_log.php</filename>
+		<filename>changelog.txt</filename>
+		<filename>index.html</filename>
+		<filename>helper.php</filename>
+		<filename>sliders.css</filename>
+		<filename>j_arrow.png</filename>
+		<filename>j_arrow_down.png</filename>
+		<folder>tmpl/</folder>
+
+	</files>
+	<config><fields name="params"><fieldset name="basic" label="basic">
+		<field name="klasse" type="radio" default="0" label="Spielklasse anzeigen" description="Wählen Sie ob die Spielklasse hinter der Mannschaft angezeigt werden soll.">
+			<option value="1">JYES</option>
+			<option value="0">JNO</option>
+		</field>
+		<field name="runden" type="radio" default="1" label="Rundenfreigabe" description="Wählen Sie ob nicht freigegebene Runden angezeigt werden sollen.">
+			<option value="1">JYES</option>
+			<option value="0">JNO</option>
+		</field>
+		<field name="vereinsdaten" type="radio" default="1" label="Vereinsdaten" description="Wählen Sie ob der Punkt Vereinsdaten angezeigt werden soll.">
+			<option value="1">JYES</option>
+			<option value="0">JNO</option>
+		</field>
+		
+		<field name="spacer" type="spacer" />
+		<field name="altItemid" type="text" default="" label="Alternative Itemid" />
+		<field name="spacer" type="spacer" />
+		
+		<field name="test" type="menuitem" default="" disable="separator" label="test" description="Nur zu Testzwecken" />
+	</fieldset></fields></config>
+</install>
+ 

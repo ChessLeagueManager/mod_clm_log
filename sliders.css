@@ -1,0 +1,19 @@
+.pane-sliders .title{margin:0;padding:2px;color:#666;cursor:pointer; }
+.pane-sliders .panel{border:1px solid #ccc;margin-bottom:3px; }
+.pane-sliders .panel h3{background:#f6f6f6;color:#666;font-size:15px;}
+.pane-sliders .panel h4{margin-top:10px;background:#f6f6f6;color:#666;font-size:12px;border:1px solid #ccc;padding-left:5px; }
+
+.pane-sliders .content{font-size:12px;padding:9px}
+.pane-sliders .content div { padding-left:15px !important; }
+.pane-sliders .content A:link{font-size:12px;font-weight:normal;}
+.pane-sliders .content A:visited{font-size:12px;font-weight:normal;}
+.pane-sliders .content A:hover{font-size:12px;font-weight:bold;}
+.pane-sliders .content A:active{font-size:12px;font-weight:bold;}
+
+.pane-sliders .adminlist{border:0 none; }
+.pane-sliders .adminlist td{border:0 none; }
+
+.jpane-toggler  span{background:transparent url('j_arrow.png') 5px 50% no-repeat;padding-left:20px; }
+.jpane-toggler-down span{background:transparent url('j_arrow_down.png') 5px 50% no-repeat;padding-left:20px; }
+.jpane-toggler-down{ border-bottom:1px solid #ccc; }
+
