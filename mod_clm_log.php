@@ -3,7 +3,9 @@
 // no direct access
 defined('_JEXEC') or die('Restricted access');
 
-if(!defined("DS")){define('DS', DIRECTORY_SEPARATOR);} // fix for Joomla 3.2
+// Konfiguration wird benötigt
+require_once (JPATH_SITE . DIRECTORY_SEPARATOR . "components" . DIRECTORY_SEPARATOR . "com_clm" . DIRECTORY_SEPARATOR . "clm" . DIRECTORY_SEPARATOR . "index.php");
+
 $user = JFactory::getUser();
 
 // angemeldet

@@ -34,9 +34,13 @@ class modCLM_LogHelper
 	$jid 		= $user->get('id');
 
 	// Konfigurationsparameter auslesen
-	$config 	= JComponentHelper::getParams( 'com_clm' );
-	$meldung_verein	= $config->get('meldung_verein',1);
-	$meldung_heim	= $config->get('meldung_heim',1);
+	$config = clm_core::$db->config();
+	$meldung_verein	= $config->meldung_verein;
+	$meldung_heim	= $config->meldung_heim;
+
+
+	$db->setQuery("SET SQL_BIG_SELECTS=1");
+	$db->query();
 
 	$query = "SELECT l.rang,t.meldung,l.name as lname,i.gid,p.sid,p.lid,p.runde,p.paar,p.dg,p.tln_nr,p.gegner,a.zps,  "
 		." l.durchgang as durchgang, " 
@@ -76,8 +80,8 @@ class modCLM_LogHelper
 	$jid 	= $user->get('id');
 
 	// Konfigurationsparameter auslesen
-	$config 	= JComponentHelper::getParams( 'com_clm' );
-	$meldung_verein	= $config->get('meldung_verein',1);
+	$config = clm_core::$db->config();
+	$meldung_verein	= $config->meldung_verein;
 
 	$query = " SELECT COUNT(m.id) as count "
 		." FROM #__clm_user as a"
@@ -140,14 +144,15 @@ class modCLM_LogHelper
 	$zps = $zps_user[0]->zps;
 
 
-	$query = " SELECT a.sid as sid,a.rang as gid,m.zps as zps,i.id,n.Gruppe as gruppe "
+	$query = " SELECT a.sid as sid,a.rang as gid,m.zps as zps,i.id,n.Gruppe as gruppe,a.params "
 		." FROM #__clm_liga as a "
 		." LEFT JOIN #__clm_mannschaften as m ON m.liga = a.id AND m.sid = a.sid "
 		." LEFT JOIN #__clm_rangliste_name as n ON n.id = a.rang AND n.sid = a.sid "
 		." LEFT JOIN #__clm_rangliste_id as i ON i.gid = n.id AND i.zps = m.zps "
 		." LEFT JOIN #__clm_saison as s ON s.id = a.sid "
 		." WHERE m.zps = '".$zps."' "
-		." AND a.rang <> 0 AND a.published = 1 AND s.published = 1 AND s.archiv = 0 AND i.id IS NULL "
+		//." AND a.rang <> 0 AND a.published = 1 AND s.published = 1 AND s.archiv = 0 AND i.id IS NULL "
+		." AND a.rang <> 0 AND a.published = 1 AND s.published = 1 AND s.archiv = 0 "
 		." GROUP BY n.Gruppe "
 		." ORDER BY m.man_nr ASC"
 		;
@@ -159,5 +164,4 @@ class modCLM_LogHelper
 	return $rangliste;
 	}
 }
- 
  
