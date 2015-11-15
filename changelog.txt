@@ -11,6 +11,9 @@ $ -> Language fix or change
 - -> Removed
 ! -> Note
 
+- - - - - 3.2.7 - [07-11-2015] - - - - - - - - - - - - - - - - - - - -
++ Einbau der Mehrsprachigkeit einschl. Sprachfiles (de,en)
+
 - - - - - 3.2.6 - [24-06-2015] - - - - - - - - - - - - - - - - - - - -
 ^ Änderung der Ranglistenabgabe im FE bis Stichtag möglich
 

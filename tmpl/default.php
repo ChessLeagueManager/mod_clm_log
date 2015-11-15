@@ -53,11 +53,11 @@ $options = array(
 
 echo JHtml::_('tabs.start', 'tab_group_id', $options);
 
-	echo JHtml::_('tabs.panel', 'Übersicht', 'panel0');
+	echo JHtml::_('tabs.panel', JText::_('MOD_CLM_LOG_OVERVIEW'), 'panel0');
 
-	echo "<div><h4>Hallo SF ".$data[0]->name.' !'."</h4></div>";
+	echo "<div><h4>".JText::_('MOD_CLM_LOG_HELLO')." ".$data[0]->name.' !'."</h4></div>";
 
-	echo JHtml::_('tabs.panel', 'Ergebnisse melden', 'panel1');
+	echo JHtml::_('tabs.panel', JText::_('MOD_CLM_LOG_INPUT_RESULT'), 'panel1');
 		//$vorher = 999;
 		$c_rang = 0; $c_lid = 0; $c_tln_nr = 0;
 		foreach ($liga as $liga ) {
@@ -97,13 +97,13 @@ echo JHtml::_('tabs.start', 'tab_group_id', $options);
 					$meldelistt_params[$key] = substr($value,$ipos+1);
 					}
 				}	
-			if (!isset($meldelistt_params['deadline_roster']))  {   //Standardbelegung
+			if (!isset($meldelistt_params['deadline_roster']) OR $meldelistt_params['deadline_roster'] == '')  {   //Standardbelegung
 				$meldelistt_params['deadline_roster'] = '0000-00-00'; }
 			if ($meldelistt_params['deadline_roster'] >= $today) { $t_meldeliste = 1; } 
 			}
 		}
 		if ($t_meldeliste == 1) {
-		echo JHtml::_('tabs.panel', 'Meldeliste abgeben', 'panel2');
+		echo JHtml::_('tabs.panel', JText::_('MOD_CLM_LOG_INPUT_TEAMLINEUP'), 'panel2');
 
 		foreach ($meldeliste as $meldeliste){ 
 			$s_meldeliste = 0;
@@ -157,7 +157,7 @@ echo JHtml::_('tabs.start', 'tab_group_id', $options);
 			}
 		}
 		if ($t_rangliste == 1) {
-		echo JHtml::_('tabs.panel', 'Rangliste abgeben', 'panel3');
+		echo JHtml::_('tabs.panel', JText::_('MOD_CLM_LOG_INPUT_CLUBLINEUP'), 'panel3');
 
 		foreach ($rangliste as $rangliste){
 			$s_rangliste = 0;
@@ -190,7 +190,7 @@ echo JHtml::_('tabs.start', 'tab_group_id', $options);
 	}
 
 	if ($conf_vereinsdaten == 1 AND $par_vereinsdaten == 1) {
-	echo JHtml::_('tabs.panel', 'Vereinsdaten ändern', 'panel4');
+	echo JHtml::_('tabs.panel', JText::_('MOD_CLM_LOG_CHANGE_CLUBDATA'), 'panel4');
 	?>
 		<div>
 		<a href="index.php?option=com_clm&view=verein&saison=<?php echo $data[0]->sid; ?>&zps=<?php echo $data[0]->zps; ?>&layout=vereinsdaten&amp;Itemid=<?php echo $itemid; ?>"><?php echo $data[0]->vname; ?></a>
