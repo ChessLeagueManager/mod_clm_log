@@ -11,6 +11,9 @@ $ -> Language fix or change
 - -> Removed
 ! -> Note
 
+- - - - - 3.2.8 - [16-12-2015] - - - - - - - - - - - - - - - - - - - -
++ Ergänzung zur Mehrsprachigkeit
+
 - - - - - 3.2.7 - [07-11-2015] - - - - - - - - - - - - - - - - - - - -
 + Einbau der Mehrsprachigkeit einschl. Sprachfiles (de,en)
 

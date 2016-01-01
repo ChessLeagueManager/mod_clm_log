@@ -24,4 +24,4 @@ require(JModuleHelper::getLayoutPath('mod_clm_log'));
 }
 // NICHT angemeldet
 else 
-{ echo "Sie sind nicht angemeldet !";}
+{ echo JText::_('MOD_CLM_LOG_INFO');}
