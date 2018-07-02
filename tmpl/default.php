@@ -1,12 +1,62 @@
-<?php // no direct access
-defined('_JEXEC') or die('Restricted access'); ?>
+<?php 
+/**
+ * @ Chess League Manager (CLM) Login Modul 
+ * @Copyright (C) 2008-2018 CLM Team.  All rights reserved
+ * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
+ * @link http://www.chessleaguemanager.de
+*/
 
-<!-- ///////// Published  ???  -->
-<?php if (!$data OR $data[0]->published < 1) { ?>
-Ihr Account ist noch nicht aktiviert oder wurde von einem Administrator gesperrt ! <?php } 
+// no direct access
+defined('_JEXEC') or die('Restricted access'); 
 
-// Published OK !
-else {
+function user_check($zps = - 1, $pkz = - 1, $mgl_nr = -1) {
+	@set_time_limit(0); // hope
+	$counter = 0;
+	//CLM parameter auslesen
+	$config = clm_core::$db->config();
+	$countryversion = $config->countryversion;
+	if ($countryversion !="de") {
+		return array(false, "e_wrongCountry", $counter);
+	}
+	// deutsche Anwendung mit DSB-Daten
+	$source = "https://dwz.svw.info/services/files/dewis.wsdl";
+	$sid = clm_core::$access->getSeason();
+	$zps = clm_core::$load->make_valid($zps, 8, "");
+	$pkz = clm_core::$load->make_valid($pkz, 8, "");
+	$mgl_nr = clm_core::$load->make_valid($mgl_nr, 8, "");
+	if (strlen($zps) != 5) {
+		return array(false, "e_wrongZPSFormat", $counter);
+	}
+	// SOAP Webservice
+	try {
+		$client = clm_core::$load->soap_wrapper($source);
+
+		// VKZ des Vereins --> Vereinsliste
+		$unionRatingList = $client->unionRatingList($zps);
+		// Detaildaten zu Mitgliedern lesen
+		foreach ($unionRatingList->members as $m) {
+			if(intval($mgl_nr) == intval($m->membership) OR $pkz == $m->pid) {
+				$counter++;
+			}
+		}
+		unset($unionRatingList);
+		unset($client);
+	}
+	catch(SOAPFault $f) {
+		if($f->getMessage() == "that is not a valid union id" || $f->getMessage() == "that union does not exists") {
+			return array(false, "e_wrongZPS",0);
+		}
+		return array(false, "e_connectionError");
+	}
+	if ($counter == 0) {
+		return array(false, "e_dewisUserNone", $counter);
+	}
+	if ($counter > 1) {
+		return array(false, "e_dewisUserMultiple", $counter);
+	}
+	return array(true, "m_dewisUserSuccess", $counter);
+}
+
 	// Konfigurationsparameter auslesen
 	$config = clm_core::$db->config();
 	$conf_meldeliste	= $config->conf_meldeliste;
@@ -14,7 +64,26 @@ else {
 	$conf_ergebnisse	= $config->conf_ergebnisse;
 	$meldung_heim		= $config->meldung_heim;
 	$meldung_verein		= $config->meldung_verein;
-	
+	$conf_user_member	= $config->user_member;
+
+//echo "<br>data:"; var_dump($data);
+	$ucheck = user_check($data[0]->zps, $data[0]->PKZ, $data[0]->mglnr);
+//echo "<br>ucheck:"; var_dump($ucheck);
+?>
+
+<!-- ///////// User Published  ???  -->
+<?php if (!$data OR $data[0]->published < 1) { ?>
+Ihr Account ist noch nicht aktiviert oder wurde von einem Administrator gesperrt! <?php } 
+
+// Check Mitglied DSB/ECF
+elseif ($conf_user_member == 1 AND $ucheck[0] === false AND $data[0]->org_exc == '0') { 
+	// Ihre Mitgliedschaft in der Schachorganisation kann nicht überprüft werden! 
+	echo JText::_('E_CLM_BERECHTIGUNG').'<br><br>';
+	echo JText::_($ucheck[1]);
+	//JFactory::getApplication()->logout();
+} 
+	// Published OK !
+else {
 	if ($altItemid	!= '') { $itemid = $altItemid; }
 	else { $itemid = '1'; }
 
@@ -34,9 +103,8 @@ if($cmd=="meldung") { $off =0;}
 // Datum der Meldung
 $now = date('Y-m-d H:i:s'); 
 $today = date("Y-m-d"); 
-?>
 
-<?php jimport( 'joomla.html.html.tabs' ); 
+jimport( 'joomla.html.html.tabs' ); 
 
 $options = array(
     'onActive' => 'function(title, description){
