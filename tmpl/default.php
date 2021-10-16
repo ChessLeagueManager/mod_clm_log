@@ -1,7 +1,7 @@
 <?php 
 /**
  * @ Chess League Manager (CLM) Login Modul 
- * @Copyright (C) 2008-2018 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2021 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
 */
@@ -87,8 +87,8 @@ else {
 	if ($altItemid	!= '') { $itemid = $altItemid; }
 	else { $itemid = '1'; }
 
-$cmd	= JRequest::getCmd('view');
-$layout	= JRequest::getCmd('layout');
+if (isset($_GET['view'])) $cmd = $_GET['view']; else $cmd = '';
+if (isset($_GET['layout'])) $cmd = $_GET['layout']; else $cmd = '';
 $off="-1";
 $cnt=0;
 
@@ -104,50 +104,69 @@ if($cmd=="meldung") { $off =0;}
 $now = date('Y-m-d H:i:s'); 
 $today = date("Y-m-d"); 
 
-jimport( 'joomla.html.html.tabs' ); 
+?>
+<style>
 
-$options = array(
-    'onActive' => 'function(title, description){
-        description.setStyle("display", "block");
-        title.addClass("open").removeClass("closed");
-    }',
-    'onBackground' => 'function(title, description){
-        description.setStyle("display", "none");
-        title.addClass("closed").removeClass("open");
-    }',
-    'startOffset' => $off,  // 0 starts on the first tab, 1 starts the second, etc...
-    'useCookie' => true, // this must not be a string. Don't use quotes.
-);
+/* Style the tab */
+.tab {
+  overflow: hidden;
+  border: 1px solid #ccc;
+  /* background-color: #f1f1f1; */
+}
 
-echo JHtml::_('tabs.start', 'tab_group_id', $options);
+/* Style the buttons inside the tab */
+.tab button {
+  background-color: inherit;
+  border: 1px solid #ccc;
+  outline: none;
+  cursor: pointer;
+  transition: 0.3s;
+  font-size: 17px;
+}
 
-	echo JHtml::_('tabs.panel', JText::_('MOD_CLM_LOG_OVERVIEW'), 'panel0');
+/* Change background color of buttons on hover */
+.tab button:hover {
+  background-color: #ddd;
+}
 
-	echo "<div><h4>".JText::_('MOD_CLM_LOG_HELLO')." ".$data[0]->name.' !'."</h4></div>";
+/* Create an active/current tablink class */
+.tab button.active {
+  background-color: #ccc;
+}
 
-	echo JHtml::_('tabs.panel', JText::_('MOD_CLM_LOG_INPUT_RESULT'), 'panel1');
-		//$vorher = 999;
-		$c_rang = 0; $c_lid = 0; $c_tln_nr = 0;
-		foreach ($liga as $liga ) {
-			// Wenn NICHT gemeldet oder noch Zeit zu korrigieren dann Runde anzeigen
-			$mdt = $liga->deadlineday.' ';
-			$mdt .= $liga->deadlinetime;
-			if (($liga->gemeldet < 1 OR $mdt >= $now) AND ($liga->liste > 0 OR ($liga->rang == 1 AND isset($liga->gid)))) {
-			  if (!($liga->meldung == 0 AND $params->get('runden') == 0)) {
-				if ($c_rang != $liga->rang OR $c_lid != $liga->lid OR $c_tln_nr != $liga->tln_nr) {
-					echo "<h4>".$liga->name; if ($params->get('klasse') == 1) { echo ' - '.$liga->lname; } echo '</h4>'; 
-					$c_rang = $liga->rang; $c_lid = $liga->lid; $c_tln_nr = $liga->tln_nr;
-				}
-			?>
-			<a class="link" href="index.php?option=com_clm&amp;view=meldung&amp;saison=<?php echo $liga->sid;?>&amp;liga=<?php echo $liga->liga; ?>&amp;runde=<?php echo $liga->runde; ?>&amp;tln=<?php echo $liga->tln_nr; ?>&amp;paar=<?php echo $liga->paar; ?>&dg=<?php echo $liga->dg; ?>&amp;Itemid=<?php echo $itemid; ?>">
-				<?php echo $liga->rname; 
-				?>
-			</a>
-			<br>
-		<?php }}}
+/* Style the tab content */
+.tabcontent {
+  display: none;
+}
+</style>
 
-	if ($conf_meldeliste == 1) {
-	if ($meldeliste) {
+<script>
+function openFunction(evt, clmFunction) {
+  var i, tabcontent, tablinks;
+  tabcontent = document.getElementsByClassName("tabcontent");
+  for (i = 0; i < tabcontent.length; i++) {
+    tabcontent[i].style.display = "none";
+  }
+  tablinks = document.getElementsByClassName("tablinks");
+  for (i = 0; i < tablinks.length; i++) {
+    tablinks[i].className = tablinks[i].className.replace(" active", "");
+  }
+  document.getElementById(clmFunction).style.display = "block";
+  evt.currentTarget.className += " active";
+}
+</script>
+
+
+<div class="tab">
+  <button class="tablinks" onclick="openFunction(event, 'overview')"><?php echo JText::_('MOD_CLM_LOG_OVERVIEW') ?></button><br />
+	  
+  <button class="tablinks" onclick="openFunction(event, 'input_result')"><?php echo JText::_('MOD_CLM_LOG_INPUT_RESULT') ?></button><br />
+<?php 	if ($conf_vereinsdaten == 1 AND $par_vereinsdaten == 1) { ?>
+	  
+  <button class="tablinks" onclick="openFunction(event, 'change_clubdata')"><?php echo JText::_('MOD_CLM_LOG_CHANGE_CLUBDATA') ?></button><br />
+<?php } ?>
+<?php 	
+	if ($conf_meldeliste == 1 AND $meldeliste) {
 		// Testen, ob Aufstellungen eingegeben werden können
 		$t_meldeliste = 0;
 		foreach ($meldeliste as $meldelistt){ 
@@ -170,37 +189,12 @@ echo JHtml::_('tabs.start', 'tab_group_id', $options);
 			if ($meldelistt_params['deadline_roster'] >= $today) { $t_meldeliste = 1; } 
 			}
 		}
-		if ($t_meldeliste == 1) {
-		echo JHtml::_('tabs.panel', JText::_('MOD_CLM_LOG_INPUT_TEAMLINEUP'), 'panel2');
+		if ($t_meldeliste == 1) { ?>
+  <button class="tablinks" onclick="openFunction(event, 'input_teamlineup')"><?php echo JText::_('MOD_CLM_LOG_INPUT_TEAMLINEUP') ?></button><br />
+		<?php } 
+	} ?>
 
-		foreach ($meldeliste as $meldeliste){ 
-			$s_meldeliste = 0;
-			if ($meldeliste->liste < 1) $s_meldeliste = 1;
-			else {
-				//Liga-Parameter aufbereiten
-				$paramsStringArray = explode("\n", $meldeliste->params);
-				$meldeliste->params = array();
-				foreach ($paramsStringArray as $value) {
-					$ipos = strpos ($value, '=');
-					if ($ipos !==false) {
-					$key = substr($value,0,$ipos);
-					if (substr($key,0,2) == "\'") $key = substr($key,2,strlen($key)-4);
-					if (substr($key,0,1) == "'") $key = substr($key,1,strlen($key)-2);
-					$meldeliste->params[$key] = substr($value,$ipos+1);
-					}
-				}	
-			if (!isset($meldeliste->params['deadline_roster']))  {   //Standardbelegung
-			$meldeliste->params['deadline_roster'] = '0000-00-00'; }
-			if ($meldeliste->params['deadline_roster'] < $today) $s_meldeliste = 0;
-			else $s_meldeliste = 1;
-			}
-			if ($s_meldeliste == 1) { ?>
-		<div>
-			<a href="index.php?option=com_clm&view=meldeliste&saison=<?php echo $meldeliste->sid; ?>&zps=<?php echo $meldeliste->zps; ?>&lid=<?php echo $meldeliste->lid; ?>&man=<?php echo $meldeliste->man_nr; ?>&amp;Itemid=<?php echo $itemid; ?>"><?php echo $meldeliste->name; ?></a> - <?php echo $meldeliste->liganame; ?> 
-		</div>
-		<?php } }
-	
-	} }
+<?php 	
 	if ($rangliste) {
 		// Testen, ob Ranglisten eingegeben werden können
 		$t_rangliste = 0;
@@ -224,10 +218,80 @@ echo JHtml::_('tabs.start', 'tab_group_id', $options);
 			if ($ranglistt_params['deadline_roster'] >= $today) { $t_rangliste = 1; } 
 			}
 		}
-		if ($t_rangliste == 1) {
-		echo JHtml::_('tabs.panel', JText::_('MOD_CLM_LOG_INPUT_CLUBLINEUP'), 'panel3');
+		if ($t_rangliste == 1) { ?>
+  <button class="tablinks" onclick="openFunction(event, 'input_clublineup')"><?php echo JText::_('MOD_CLM_LOG_INPUT_CLUBLINEUP') ?></button><br />
+		<?php } 
+	} ?>
+</div>
 
-		foreach ($rangliste as $rangliste){
+<div id="overview" class="tabcontent">
+	<h4><?php echo "<br>".JText::_('MOD_CLM_LOG_HELLO')." ".$data[0]->name.' !' ?></h4>
+</div>
+
+<div id="input_result" class="tabcontent">
+	<?php
+		$c_rang = 0; $c_lid = 0; $c_tln_nr = 0;
+//echo "<br>liga:"; var_dump($liga);
+		foreach ($liga as $liga ) {
+			// Wenn NICHT gemeldet oder noch Zeit zu korrigieren dann Runde anzeigen
+			$mdt = $liga->deadlineday.' ';
+			$mdt .= $liga->deadlinetime;
+			if (($liga->gemeldet < 1 OR $mdt >= $now) AND ($liga->liste > 0 OR ($liga->rang == 1 AND isset($liga->gid)))) {
+			  if (!($liga->meldung == 0 AND $params->get('runden') == 0)) {
+				if ($c_rang != $liga->rang OR $c_lid != $liga->lid OR $c_tln_nr != $liga->tln_nr) {
+					echo "<h4><br>".$liga->name; if ($params->get('klasse') == 1) { echo ' - '.$liga->lname; } echo '</h4>'; 
+					$c_rang = $liga->rang; $c_lid = $liga->lid; $c_tln_nr = $liga->tln_nr;
+				}
+			?>
+			<a class="link" href="index.php?option=com_clm&amp;view=meldung&amp;saison=<?php echo $liga->sid;?>&amp;liga=<?php echo $liga->liga; ?>&amp;runde=<?php echo $liga->runde; ?>&amp;tln=<?php echo $liga->tln_nr; ?>&amp;paar=<?php echo $liga->paar; ?>&dg=<?php echo $liga->dg; ?>&amp;Itemid=<?php echo $itemid; ?>">
+				<?php echo $liga->rname; ?>
+			</a>
+			<br>
+		<?php }}} ?>
+</div>
+
+<div id="change_clubdata" class="tabcontent">
+		<br>
+		<div>
+		<a href="index.php?option=com_clm&view=verein&saison=<?php echo $data[0]->sid; ?>&zps=<?php echo $data[0]->zps; ?>&layout=vereinsdaten&amp;Itemid=<?php echo $itemid; ?>"><?php echo $data[0]->vname; ?></a>
+		</div>
+
+</div>
+
+<div id="input_teamlineup" class="tabcontent">
+	<br>
+	<?php foreach ($meldeliste as $meldeliste){ 
+			$s_meldeliste = 0;
+			if ($meldeliste->liste < 1) $s_meldeliste = 1;
+			else {
+				//Liga-Parameter aufbereiten
+				$paramsStringArray = explode("\n", $meldeliste->params);
+				$meldeliste->params = array();
+				foreach ($paramsStringArray as $value) {
+					$ipos = strpos ($value, '=');
+					if ($ipos !==false) {
+					$key = substr($value,0,$ipos);
+					if (substr($key,0,2) == "\'") $key = substr($key,2,strlen($key)-4);
+					if (substr($key,0,1) == "'") $key = substr($key,1,strlen($key)-2);
+					$meldeliste->params[$key] = substr($value,$ipos+1);
+					}
+				}	
+				if (!isset($meldeliste->params['deadline_roster']))  {   //Standardbelegung
+					$meldeliste->params['deadline_roster'] = '0000-00-00'; }
+				if ($meldeliste->params['deadline_roster'] < $today) $s_meldeliste = 0;
+				else $s_meldeliste = 1;
+			}
+			if ($s_meldeliste == 1) { ?>
+		<div>
+			<a href="index.php?option=com_clm&view=meldeliste&saison=<?php echo $meldeliste->sid; ?>&zps=<?php echo $meldeliste->zps; ?>&lid=<?php echo $meldeliste->lid; ?>&man=<?php echo $meldeliste->man_nr; ?>&amp;Itemid=<?php echo $itemid; ?>"><?php echo $meldeliste->name; ?></a> - <?php echo $meldeliste->liganame; ?> 
+		</div>
+		<?php } } ?>
+
+</div>
+
+<div id="input_clublineup" class="tabcontent">
+	<br>
+	<?php foreach ($rangliste as $rangliste){
 			$s_rangliste = 0;
 			if ($rangliste->id == '') $s_rangliste = 1;
 			else {
@@ -248,25 +312,13 @@ echo JHtml::_('tabs.start', 'tab_group_id', $options);
 			if ($rangliste->params['deadline_roster'] < $today) $s_rangliste = 0;
 			else $s_rangliste = 1;
 			}
-		if ($s_rangliste == 1) { 		//if ($rangliste->id == "") { ?>
+			if ($s_rangliste == 1) { ?>
 		<div>
 			<a href="index.php?option=com_clm&view=meldeliste&layout=rangliste&saison=<?php echo $rangliste->sid; ?>&zps=<?php echo $rangliste->zps; ?>&gid=<?php echo $rangliste->gid; ?>&amp;Itemid=<?php echo $itemid; ?>"><?php echo $rangliste->gruppe; ?></a> 
 		</div>
-		<?php }}
-	
-	}}
-	}
+		<?php } } ?>
 
-	if ($conf_vereinsdaten == 1 AND $par_vereinsdaten == 1) {
-	echo JHtml::_('tabs.panel', JText::_('MOD_CLM_LOG_CHANGE_CLUBDATA'), 'panel4');
-	?>
-		<div>
-		<a href="index.php?option=com_clm&view=verein&saison=<?php echo $data[0]->sid; ?>&zps=<?php echo $data[0]->zps; ?>&layout=vereinsdaten&amp;Itemid=<?php echo $itemid; ?>"><?php echo $data[0]->vname; ?></a>
-		</div>
-		<?php 
+</div>
 
-	}
-
-echo JHtml::_('tabs.end');
-
+<?php
 } ?>

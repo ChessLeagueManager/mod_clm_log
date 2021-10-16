@@ -2,12 +2,12 @@
 <extension type="module" version="1.7.0" client="site" method="upgrade">
 	<name>CLM Login Modul</name>
 	<author>CLM Team</author>
-	<creationDate>02.07.2018</creationDate>
-	<copyright>(C) 2008 - 2018 CLM Project All rights reserved.</copyright>
+	<creationDate>12.09.2021</creationDate>
+	<copyright>(C) 2008 - 2021 CLM Project All rights reserved.</copyright>
 	<license>GNU/GPL</license>
 	<authorEmail>fishpoke@fishpoke.de</authorEmail>
 	<authorUrl>www.chessleaguemanager.de</authorUrl>
-	<version>3.3.0</version>
+	<version>3.4.0</version>
 	<description>MOD_CLM_LOG_XML_DESCRIPTION</description>
 	<files>
 		<filename module="mod_clm_log">mod_clm_log.php</filename>

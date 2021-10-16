@@ -11,6 +11,10 @@ $ -> Language fix or change
 - -> Removed
 ! -> Note
 
+- - - - - 3.4.0 - [04-07-2021] - - - - - - - - - - - - - - - - - - - -
+^ Code-Anpassung Joomla 4
+^ Button transparent
+
 - - - - - 3.3.0 - [02-07-2018] - - - - - - - - - - - - - - - - - - - -
 + Benutzercheck auf Vereinszugehörigkeit (optional)
 
