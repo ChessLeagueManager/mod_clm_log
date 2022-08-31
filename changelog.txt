@@ -11,6 +11,9 @@ $ -> Language fix or change
 - -> Removed
 ! -> Note
 
+- - - - - 4.0.0 - [14-08-2022] - - - - - - - - - - - - - - - - - - - -
+^ Keine Berechtigung für Benutzer 'Spieler'
+
 - - - - - 3.4.0 - [04-07-2021] - - - - - - - - - - - - - - - - - - - -
 ^ Code-Anpassung Joomla 4
 ^ Button transparent

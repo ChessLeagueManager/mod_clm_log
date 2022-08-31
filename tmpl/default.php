@@ -1,7 +1,7 @@
 <?php 
 /**
  * @ Chess League Manager (CLM) Login Modul 
- * @Copyright (C) 2008-2021 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2022 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
 */
@@ -100,6 +100,8 @@ if($cmd=="meldeliste" AND $layout=="rangliste") { $off =1;}
 if($cmd=="vereinsdaten") { $off =$cnt+1;}
 if($cmd=="meldung") { $off =0;}
 
+$usertype = $data[0]->usertype;
+
 // Datum der Meldung
 $now = date('Y-m-d H:i:s'); 
 $today = date("Y-m-d"); 
@@ -159,10 +161,13 @@ function openFunction(evt, clmFunction) {
 
 <div class="tab">
   <button class="tablinks" onclick="openFunction(event, 'overview')"><?php echo JText::_('MOD_CLM_LOG_OVERVIEW') ?></button><br />
-	  
+
+<?php 	if ($usertype != 'spl') { ?>  	  
   <button class="tablinks" onclick="openFunction(event, 'input_result')"><?php echo JText::_('MOD_CLM_LOG_INPUT_RESULT') ?></button><br />
-<?php 	if ($conf_vereinsdaten == 1 AND $par_vereinsdaten == 1) { ?>
-	  
+<?php } ?>
+  
+<?php 	if ($usertype != 'spl' AND $conf_vereinsdaten == 1 AND $par_vereinsdaten == 1) { ?>  
+   
   <button class="tablinks" onclick="openFunction(event, 'change_clubdata')"><?php echo JText::_('MOD_CLM_LOG_CHANGE_CLUBDATA') ?></button><br />
 <?php } ?>
 <?php 	
@@ -189,7 +194,7 @@ function openFunction(evt, clmFunction) {
 			if ($meldelistt_params['deadline_roster'] >= $today) { $t_meldeliste = 1; } 
 			}
 		}
-		if ($t_meldeliste == 1) { ?>
+		if ($usertype != 'spl' AND $t_meldeliste == 1) { ?>
   <button class="tablinks" onclick="openFunction(event, 'input_teamlineup')"><?php echo JText::_('MOD_CLM_LOG_INPUT_TEAMLINEUP') ?></button><br />
 		<?php } 
 	} ?>
