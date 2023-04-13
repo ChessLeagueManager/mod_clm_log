@@ -26,11 +26,19 @@ function user_check($zps = - 1, $pkz = - 1, $mgl_nr = -1) {
 	$mgl_nr = clm_core::$load->make_valid($mgl_nr, 8, "");
 	if (strlen($zps) != 5) {
 		return array(false, "e_wrongZPSFormat", $counter);
+	}	
+	// Check SOAP Webservice is down
+	try {
+		$client = new SoapClient($source,array('exceptions' => true));
+		unset($client);
 	}
-	// SOAP Webservice
+	catch(Exception $e) {
+		return array(false, "e_servicedownError");
+	}
+
+	// Using SOAP Webservice 
 	try {
 		$client = clm_core::$load->soap_wrapper($source);
-
 		// VKZ des Vereins --> Vereinsliste
 		$unionRatingList = $client->unionRatingList($zps);
 		// Detaildaten zu Mitgliedern lesen
@@ -66,9 +74,11 @@ function user_check($zps = - 1, $pkz = - 1, $mgl_nr = -1) {
 	$meldung_verein		= $config->meldung_verein;
 	$conf_user_member	= $config->user_member;
 
+	if ($conf_user_member == 1 ) {
 //echo "<br>data:"; var_dump($data);
-	$ucheck = user_check($data[0]->zps, $data[0]->PKZ, $data[0]->mglnr);
+		$ucheck = user_check($data[0]->zps, $data[0]->PKZ, $data[0]->mglnr);
 //echo "<br>ucheck:"; var_dump($ucheck);
+	}
 ?>
 
 <!-- ///////// User Published  ???  -->
@@ -76,11 +86,13 @@ function user_check($zps = - 1, $pkz = - 1, $mgl_nr = -1) {
 Ihr Account ist noch nicht aktiviert oder wurde von einem Administrator gesperrt! <?php } 
 
 // Check Mitglied DSB/ECF
-elseif ($conf_user_member == 1 AND $ucheck[0] === false AND $data[0]->org_exc == '0') { 
-	// Ihre Mitgliedschaft in der Schachorganisation kann nicht überprüft werden! 
+elseif ($conf_user_member == 1 AND $ucheck[0] === false AND $data[0]->org_exc == '0') {
+// Ihre Mitgliedschaft in der Schachorganisation kann nicht überprüft werden! 
 	echo JText::_('E_CLM_BERECHTIGUNG').'<br><br>';
 	echo JText::_($ucheck[1]);
-	//JFactory::getApplication()->logout();
+	$name = 'keine CLM-Berechtigung';
+	$content = str_replace ("<br>", " - ", JText::_($ucheck[1]));
+	clm_core::addInfo($name,$content);
 } 
 	// Published OK !
 else {
