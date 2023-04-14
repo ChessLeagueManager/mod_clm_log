@@ -1,4 +1,10 @@
 <?php
+/**
+ * @ Chess League Manager (CLM) Login Modul 
+ * @Copyright (C) 2008-2023 CLM Team.  All rights reserved
+ * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
+ * @link http://www.chessleaguemanager.de
+*/
 
 // no direct access
 defined('_JEXEC') or die('Restricted access');
@@ -24,4 +30,4 @@ require(JModuleHelper::getLayoutPath('mod_clm_log'));
 }
 // NICHT angemeldet
 else 
-{ echo JText::_('MOD_CLM_LOG_INFO');}
+{ echo "<p>".JText::_('MOD_CLM_LOG_INFO')."</p>";}

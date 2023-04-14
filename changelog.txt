@@ -11,6 +11,9 @@ $ -> Language fix or change
 - -> Removed
 ! -> Note
 
+- - - - - 4.0.2 - [13-04-2023] - - - - - - - - - - - - - - - - - - - -
+^ Anzeigeergänzung wegen Page Builder 
+
 - - - - - 4.0.1 - [10-09-2022] - - - - - - - - - - - - - - - - - - - -
 ^ Benutzercheck auf Vereinszugehörigkeit (Nachbesserung)
 
