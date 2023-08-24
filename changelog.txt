@@ -11,6 +11,10 @@ $ -> Language fix or change
 - -> Removed
 ! -> Note
 
+- - - - - 4.1.0 - [12-08-2023] - - - - - - - - - - - - - - - - - - - -
+^ Vorprüfung bzgl. Ergebniseingabe
++ Kontaktdatenpflege möglich 
+
 - - - - - 4.0.2 - [13-04-2023] - - - - - - - - - - - - - - - - - - - -
 ^ Anzeigeergänzung wegen Page Builder 
 

@@ -1,14 +1,22 @@
 <?php 
 /**
  * @ Chess League Manager (CLM) Login Modul 
- * @Copyright (C) 2008-2022 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2023 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
 */
-
 // no direct access
 defined('_JEXEC') or die('Restricted access'); 
 
+	function getParam($name) {
+		$db = JFactory::getDbo();
+		$db->setQuery('SELECT manifest_cache FROM #__extensions WHERE element = "com_clm"');
+		$manifest = json_decode($db->loadResult(), true);
+		return $manifest[$name];
+	}
+
+// Mindest-Version der Hauptkomponente für Kontaktdatenpflege
+$vversion = "4.1.0b";
 function user_check($zps = - 1, $pkz = - 1, $mgl_nr = -1) {
 	@set_time_limit(0); // hope
 	$counter = 0;
@@ -172,11 +180,16 @@ function openFunction(evt, clmFunction) {
 
 
 <div class="tab">
+<?php if ($vversion > getParam('version')) { ?>
   <button class="tablinks" onclick="openFunction(event, 'overview')"><?php echo JText::_('MOD_CLM_LOG_OVERVIEW') ?></button><br />
-
-<?php 	if ($usertype != 'spl') { ?>  	  
-  <button class="tablinks" onclick="openFunction(event, 'input_result')"><?php echo JText::_('MOD_CLM_LOG_INPUT_RESULT') ?></button><br />
+<?php } else { ?>
+  <button class="tablinks" onclick="openFunction(event, 'contact')"><?php echo JText::_('MOD_CLM_LOG_CONTACT') ?></button><br />
 <?php } ?>
+
+<?php 	   	  
+		if ($usertype != 'spl' AND ($liga)) { ?>
+  <button class="tablinks" onclick="openFunction(event, 'input_result')"><?php echo JText::_('MOD_CLM_LOG_INPUT_RESULT') ?></button><br />
+		<?php } ?>
   
 <?php 	if ($usertype != 'spl' AND $conf_vereinsdaten == 1 AND $par_vereinsdaten == 1) { ?>  
    
@@ -231,44 +244,66 @@ function openFunction(evt, clmFunction) {
 					}
 				}	
 			if (!isset($ranglistt_params['deadline_roster']))  {   //Standardbelegung
-				$ranglistt_params['deadline_roster'] = '0000-00-00'; }
+				$ranglistt_params['deadline_roster'] = '1970-01-01'; }
 			if ($ranglistt_params['deadline_roster'] >= $today) { $t_rangliste = 1; } 
 			}
 		}
-		if ($t_rangliste == 1) { ?>
+		if ($usertype != 'spl' AND $t_rangliste == 1) { ?>
   <button class="tablinks" onclick="openFunction(event, 'input_clublineup')"><?php echo JText::_('MOD_CLM_LOG_INPUT_CLUBLINEUP') ?></button><br />
 		<?php } 
 	} ?>
 </div>
 
 <div id="overview" class="tabcontent">
-	<h4><?php echo "<br>".JText::_('MOD_CLM_LOG_HELLO')." ".$data[0]->name.' !' ?></h4>
+	<b><?php echo "<br>".JText::_('MOD_CLM_LOG_HELLO')." ".$data[0]->name.' !' ?></b>
+</div>
+
+<div id="contact" class="tabcontent">
+	<b><?php echo "<br>".JText::_('MOD_CLM_LOG_CONTACT')." ".$data[0]->name ?></b><br/>
+        <?php if($data[0]->tel_fest == "") { $nr=JText::_("MOD_CLM_LOG_CONTACT_UNPROVIDED"); } else { $nr=$data[0]->tel_fest; } echo JText::_("MOD_CLM_LOG_CONTACT_WIRED") . " ".$nr; ?><br/>
+        <?php if($data[0]->tel_mobil == "") { $nr=JText::_("MOD_CLM_LOG_CONTACT_UNPROVIDED"); } else { $nr=$data[0]->tel_mobil; } echo JText::_("MOD_CLM_LOG_CONTACT_MOBILE") . " ".$nr; ?><br/>
+        <?php echo JText::_("MOD_CLM_LOG_CONTACT_EMAIL") . " ".$data[0]->email; ?><br/>
+        <a class="link" href="index.php?option=com_clm&amp;view=contact"><?php echo JText::_("MOD_CLM_LOG_CONTACT_UPDATE"); ?></a>
 </div>
 
 <div id="input_result" class="tabcontent">
 	<?php
-		$c_rang = 0; $c_lid = 0; $c_tln_nr = 0;
+	$c_rang = 0; $c_lid = 0; $c_tln_nr = 0;
+	$oll = "";
+	$oln = "";
 //echo "<br>liga:"; var_dump($liga);
-		foreach ($liga as $liga ) {
+		foreach ($liga as $liga) {
 			// Wenn NICHT gemeldet oder noch Zeit zu korrigieren dann Runde anzeigen
 			$mdt = $liga->deadlineday.' ';
 			$mdt .= $liga->deadlinetime;
 			if (($liga->gemeldet < 1 OR $mdt >= $now) AND ($liga->liste > 0 OR ($liga->rang == 1 AND isset($liga->gid)))) {
-			  if (!($liga->meldung == 0 AND $params->get('runden') == 0)) {
-				if ($c_rang != $liga->rang OR $c_lid != $liga->lid OR $c_tln_nr != $liga->tln_nr) {
-					echo "<h4><br>".$liga->name; if ($params->get('klasse') == 1) { echo ' - '.$liga->lname; } echo '</h4>'; 
-					$c_rang = $liga->rang; $c_lid = $liga->lid; $c_tln_nr = $liga->tln_nr;
-				}
+				if (!($liga->meldung == 0 AND $params->get('runden') == 0)) {
+					if ($c_rang != $liga->rang OR $c_lid != $liga->lid OR $c_tln_nr != $liga->tln_nr) {
+						if (($liga->name != $oln) || ($liga->lname != $oll)) {
+							echo "<h5><br>".$liga->name; if ($params->get('klasse') == 1) { echo ' - '.$liga->lname; } echo '</h5>'; 
+							$oln = $liga->name;
+							$oll = $liga->lname;
+						}
+						$c_rang = $liga->rang; $c_lid = $liga->lid; $c_tln_nr = $liga->tln_nr;
+					}
 			?>
 			<a class="link" href="index.php?option=com_clm&amp;view=meldung&amp;saison=<?php echo $liga->sid;?>&amp;liga=<?php echo $liga->liga; ?>&amp;runde=<?php echo $liga->runde; ?>&amp;tln=<?php echo $liga->tln_nr; ?>&amp;paar=<?php echo $liga->paar; ?>&dg=<?php echo $liga->dg; ?>&amp;Itemid=<?php echo $itemid; ?>">
 				<?php echo $liga->rname; ?>
 			</a>
 			<br>
-		<?php }}} ?>
+<?php				}
+			} else {
+				if (($liga->name != $oln) || ($liga->lname != $oll)) {
+					echo "<b><br>".$liga->name; if ($params->get('klasse') == 1) { echo ' - '.$liga->lname; } echo '</b><br/>Zur Zeit noch keine Meldung möglich.<br/>'; 
+					$oln = $liga->name;
+					$oll = $liga->lname;
+				}
+			}
+		} ?>
 </div>
 
 <div id="change_clubdata" class="tabcontent">
-		<br>
+	<b><?php echo "<br>".JText::_('MOD_CLM_LOG_CHANGE_CLUBDATA'); ?></b><br/>
 		<div>
 		<a href="index.php?option=com_clm&view=verein&saison=<?php echo $data[0]->sid; ?>&zps=<?php echo $data[0]->zps; ?>&layout=vereinsdaten&amp;Itemid=<?php echo $itemid; ?>"><?php echo $data[0]->vname; ?></a>
 		</div>
@@ -298,7 +333,7 @@ function openFunction(evt, clmFunction) {
 				if ($meldeliste->params['deadline_roster'] < $today) $s_meldeliste = 0;
 				else $s_meldeliste = 1;
 			}
-			if ($s_meldeliste == 1) { ?>
+			if ($usertype != 'spl' AND $s_meldeliste == 1) { ?>
 		<div>
 			<a href="index.php?option=com_clm&view=meldeliste&saison=<?php echo $meldeliste->sid; ?>&zps=<?php echo $meldeliste->zps; ?>&lid=<?php echo $meldeliste->lid; ?>&man=<?php echo $meldeliste->man_nr; ?>&amp;Itemid=<?php echo $itemid; ?>"><?php echo $meldeliste->name; ?></a> - <?php echo $meldeliste->liganame; ?> 
 		</div>
@@ -325,11 +360,11 @@ function openFunction(evt, clmFunction) {
 				}
 			}	
 			if (!isset($rangliste->params['deadline_roster']))  {   //Standardbelegung
-			$rangliste->params['deadline_roster'] = '0000-00-00'; }
+			$rangliste->params['deadline_roster'] = '1970-01-01'; }
 			if ($rangliste->params['deadline_roster'] < $today) $s_rangliste = 0;
 			else $s_rangliste = 1;
 			}
-			if ($s_rangliste == 1) { ?>
+			if ($usertype != 'spl' AND $s_rangliste == 1) { ?>
 		<div>
 			<a href="index.php?option=com_clm&view=meldeliste&layout=rangliste&saison=<?php echo $rangliste->sid; ?>&zps=<?php echo $rangliste->zps; ?>&gid=<?php echo $rangliste->gid; ?>&amp;Itemid=<?php echo $itemid; ?>"><?php echo $rangliste->gruppe; ?></a> 
 		</div>
