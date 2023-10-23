@@ -191,10 +191,10 @@ function openFunction(evt, clmFunction) {
   <button class="tablinks" onclick="openFunction(event, 'input_result')"><?php echo JText::_('MOD_CLM_LOG_INPUT_RESULT') ?></button><br />
 		<?php } ?>
   
-<?php 	if ($usertype != 'spl' AND $conf_vereinsdaten == 1 AND $par_vereinsdaten == 1) { ?>  
-   
+<?php 	if ($usertype != 'spl' AND $conf_vereinsdaten == 1 AND $par_vereinsdaten == 1) {   
+			if (!is_null($data[0]->zps) AND $data[0]->zps > '0') { ?>
   <button class="tablinks" onclick="openFunction(event, 'change_clubdata')"><?php echo JText::_('MOD_CLM_LOG_CHANGE_CLUBDATA') ?></button><br />
-<?php } ?>
+<?php } } ?>
 <?php 	
 	if ($conf_meldeliste == 1 AND $meldeliste) {
 		// Testen, ob Aufstellungen eingegeben werden können
@@ -276,7 +276,7 @@ function openFunction(evt, clmFunction) {
 			// Wenn NICHT gemeldet oder noch Zeit zu korrigieren dann Runde anzeigen
 			$mdt = $liga->deadlineday.' ';
 			$mdt .= $liga->deadlinetime;
-			if (($liga->gemeldet < 1 OR $mdt >= $now) AND ($liga->liste > 0 OR ($liga->rang == 1 AND isset($liga->gid)))) {
+			if (($liga->gemeldet < 1 OR $mdt >= $now) AND ($liga->liste > 0 OR ($liga->rang > 0 AND isset($liga->gid)))) {
 				if (!($liga->meldung == 0 AND $params->get('runden') == 0)) {
 					if ($c_rang != $liga->rang OR $c_lid != $liga->lid OR $c_tln_nr != $liga->tln_nr) {
 						if (($liga->name != $oln) || ($liga->lname != $oll)) {
@@ -294,7 +294,8 @@ function openFunction(evt, clmFunction) {
 <?php				}
 			} else {
 				if (($liga->name != $oln) || ($liga->lname != $oll)) {
-					echo "<b><br>".$liga->name; if ($params->get('klasse') == 1) { echo ' - '.$liga->lname; } echo '</b><br/>Zur Zeit noch keine Meldung möglich.<br/>'; 
+//					echo "<b><br>".$liga->name; if ($params->get('klasse') == 1) { echo ' - '.$liga->lname; } echo '</b><br/>Zur Zeit noch keine Meldung möglich.<br/>'; 
+					echo "<b><br>".$liga->name; if ($params->get('klasse') == 1) { echo ' - '.$liga->lname; } echo '</b><br/>'; 
 					$oln = $liga->name;
 					$oll = $liga->lname;
 				}

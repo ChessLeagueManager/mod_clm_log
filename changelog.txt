@@ -11,6 +11,9 @@ $ -> Language fix or change
 - -> Removed
 ! -> Note
 
+- - - - - 4.1.1 - [01-10-2023] - - - - - - - - - - - - - - - - - - - -
+# Entfernen der Anzeige 'Zur Zeit noch keine Meldung möglich.'
+
 - - - - - 4.1.0 - [12-08-2023] - - - - - - - - - - - - - - - - - - - -
 ^ Vorprüfung bzgl. Ergebniseingabe
 + Kontaktdatenpflege möglich 
