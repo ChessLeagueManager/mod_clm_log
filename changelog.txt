@@ -11,6 +11,10 @@ $ -> Language fix or change
 - -> Removed
 ! -> Note
 
+- - - - - 4.1.2 - [11-11-2023] - - - - - - - - - - - - - - - - - - - -
+^ Entfernen des Parameters Rundenfreigabe -> Ergebnismeldung nur für zur Meldung freigegebene Runden
+^ Bei gesperrter Anzeige der Mannschaftsaufstellung keine Ergebnismeldung möglich
+ 
 - - - - - 4.1.1 - [01-10-2023] - - - - - - - - - - - - - - - - - - - -
 # Entfernen der Anzeige 'Zur Zeit noch keine Meldung möglich.'
 

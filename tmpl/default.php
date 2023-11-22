@@ -277,7 +277,7 @@ function openFunction(evt, clmFunction) {
 			$mdt = $liga->deadlineday.' ';
 			$mdt .= $liga->deadlinetime;
 			if (($liga->gemeldet < 1 OR $mdt >= $now) AND ($liga->liste > 0 OR ($liga->rang > 0 AND isset($liga->gid)))) {
-				if (!($liga->meldung == 0 AND $params->get('runden') == 0)) {
+				// if (!($liga->meldung == 0 AND $params->get('runden') == 0)) {
 					if ($c_rang != $liga->rang OR $c_lid != $liga->lid OR $c_tln_nr != $liga->tln_nr) {
 						if (($liga->name != $oln) || ($liga->lname != $oll)) {
 							echo "<h5><br>".$liga->name; if ($params->get('klasse') == 1) { echo ' - '.$liga->lname; } echo '</h5>'; 
@@ -291,7 +291,7 @@ function openFunction(evt, clmFunction) {
 				<?php echo $liga->rname; ?>
 			</a>
 			<br>
-<?php				}
+<?php			//	}
 			} else {
 				if (($liga->name != $oln) || ($liga->lname != $oll)) {
 //					echo "<b><br>".$liga->name; if ($params->get('klasse') == 1) { echo ' - '.$liga->lname; } echo '</b><br/>Zur Zeit noch keine Meldung möglich.<br/>'; 
