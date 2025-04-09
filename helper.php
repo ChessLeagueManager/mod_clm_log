@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Login Modul 
- * @Copyright (C) 2008-2023 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2025 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
 */
@@ -10,7 +10,7 @@ defined('_JEXEC') or die('Restricted access');
 
 class modCLM_LogHelper
 {
- public static function getData(&$params)
+ public static function getData($params)
 	{
 	global $mainframe;
 	$db		= JFactory::getDBO();
@@ -31,7 +31,7 @@ class modCLM_LogHelper
 	return $data;
 	}
 
- public static function getLiga(&$params)
+ public static function getLiga($params)
 	{
 	global $mainframe;
 	$db		= JFactory::getDBO();
@@ -43,9 +43,6 @@ class modCLM_LogHelper
 	$meldung_verein	= $config->meldung_verein;
 	$meldung_heim	= $config->meldung_heim;
 
-
-//	$db->setQuery("SET SQL_BIG_SELECTS=1");
-//	$db->query();
 	clm_core::$db->query("SET SQL_BIG_SELECTS=1");	
 
 	$query = "SELECT l.rang,t.meldung,l.name as lname,i.gid,p.sid,p.lid,p.runde,p.paar,p.dg,p.tln_nr,p.gegner,a.zps,  "
@@ -78,6 +75,48 @@ class modCLM_LogHelper
 	$liga = $db->loadObjectList();
 
 	return $liga;
+	}
+
+ public static function getLiga_SL($params)
+	{
+	global $mainframe;
+	$db		= JFactory::getDBO();
+	$user		= JFactory::getUser();
+	$jid 		= $user->get('id');
+
+	// Konfigurationsparameter auslesen
+	$config = clm_core::$db->config();
+	$meldung_verein	= $config->meldung_verein;
+	$meldung_heim	= $config->meldung_heim;
+
+	clm_core::$db->query("SET SQL_BIG_SELECTS=1");	
+
+	$query = "SELECT l.rang,t.meldung,l.name as lname,p.sid,p.lid,p.runde,p.paar,p.dg,p.tln_nr,p.gegner,a.zps,  "
+		." l.durchgang as durchgang, l.params, " 
+		." t.deadlineday, t.deadlinetime, t.name as rname, " 
+		." m.id,m.sid,m.name,m.liga,m.man_nr,m.published,p.gemeldet,mg.name as gname "
+		." , m.liste "
+		." FROM #__clm_user as a"
+		." LEFT JOIN #__clm_saison as s ON s.id = a.sid "
+		." LEFT JOIN #__clm_liga as l ON ( l.sl = a.jid ) "
+		." LEFT JOIN #__clm_rnd_man as p ON ( p.lid = l.id ) "
+		." LEFT JOIN #__clm_mannschaften as m ON ( m.liga = p.lid AND m.tln_nr = p.tln_nr ) "
+		." LEFT JOIN #__clm_mannschaften as mg ON ( mg.liga = p.lid AND mg.tln_nr = p.gegner ) "
+//		." LEFT JOIN #__clm_rangliste_id as i ON i.zps = a.zps AND i.gid = l.rang "
+		." LEFT JOIN #__clm_runden_termine as t ON t.nr = (p.runde + (l.runden * (p.dg - 1))) AND t.liga = l.id " 
+		." WHERE a.jid = ".$jid
+		." AND s.published = 1 AND s.archiv = 0 "
+		." AND l.anzeige_ma = 0 AND l.rnd = 1 AND l.published = 1 "
+		." AND p.heim = 1 "
+		." AND m.man_nr > 0 "
+		." AND mg.man_nr > 0 "
+		." AND t.meldung = 1 AND t.published = 1 "
+		." ORDER BY l.id, p.dg ASC, p.runde ASC, p.paar "
+		;
+	$db->setQuery( $query );
+	$liga_sl = $db->loadObjectList();
+
+	return $liga_sl;
 	}
 
  public static function getMannschaften($params)

@@ -2,13 +2,27 @@
 <extension type="module" version="1.7.0" client="site" method="upgrade">
 	<name>CLM Login Modul</name>
 	<author>CLM Team</author>
-	<creationDate>06.04.2024</creationDate>
-	<copyright>(C) 2008 - 2024 CLM Project All rights reserved.</copyright>
+	<creationDate>03.04.2025</creationDate>
+	<copyright>(C) 2008 - 2025 CLM Project All rights reserved.</copyright>
 	<license>GNU/GPL</license>
 	<authorEmail>fishpoke@fishpoke.de</authorEmail>
 	<authorUrl>www.chessleaguemanager.de</authorUrl>
-	<version>4.1.3</version>
-	<description>MOD_CLM_LOG_XML_DESCRIPTION</description>
+	<version>4.2.4</version>
+	<description>
+		<![CDATA[
+		<h3>Chess League Manager : Login Modul</h3>
+		<p>Das Modul, welches die Frontend Funktionen für registrierte Nutzer der CLM Komponente zur Verfügung stellt.</p>
+		<p>&copy; CLM Team </p>	 	
+		<p><a href="https://www.chessleaguemanager.de" target="_blank">CLM Projekt Homepage</a>  |  <a href="https://www.chessleaguemanager.de/index.php?option=com_kunena" target="blank">Support Forum</a></p>
+		<br><br>
+		<u>Das Wichtigste zur neuen Version 4.2.4 :</u>
+		<ul type="square">
+		 <li><font color="red">Neu: Ergebniseingabe durch Staffelleiter im Frontend freischaltbar</font></li>
+		 <li>Voraussetzung: Beta 4.2.4 oder höher der Hauptkomponente bzw. ab Testpaket 4.2.3b</li> 
+		</ul></br>
+		<p>Hinweise, Fehlermeldungen, Wünsche bitte über unser Forum</p>
+		]]>
+	</description>
 	<files>
 		<filename module="mod_clm_log">mod_clm_log.php</filename>
 		<filename>changelog.txt</filename>

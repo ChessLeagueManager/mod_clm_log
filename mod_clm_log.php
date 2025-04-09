@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Login Modul 
- * @Copyright (C) 2008-2023 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2025 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
 */
@@ -23,6 +23,7 @@ $altItemid	= $params->def('altItemid');
 
 $data		= modCLM_LogHelper::getData($params);
 $liga		= modCLM_LogHelper::getLiga($params);
+$liga_sl	= modCLM_LogHelper::getLiga_SL($params);
 $meldeliste	= modCLM_LogHelper::getMeldeliste($params);
 $rangliste	= modCLM_LogHelper::getRangliste($params);
 
