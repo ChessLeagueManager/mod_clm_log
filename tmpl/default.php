@@ -81,6 +81,7 @@ function user_check($zps = - 1, $pkz = - 1, $mgl_nr = -1) {
 	$meldung_heim		= $config->meldung_heim;
 	$meldung_verein		= $config->meldung_verein;
 	$fe_sl_ergebnisse 	= $config->fe_sl_ergebnisse;
+	$fe_ar_ergebnisse 	= $config->fe_ar_ergebnisse;
 	$conf_user_member	= $config->user_member;
 
 	if ($conf_user_member == 1 ) {
@@ -234,6 +235,33 @@ function openFunction(evt, clmFunction) {
 	} ?>
 	
 <?php
+	// Mindestversion der CLM-Hauptkomponente für die Ergebniseingabe im FE durch Arbiter / Scchiedsrichter
+	$min_version = '4.2.3c';
+	if ($usertype != 'spl' AND $usertype != 'mf' AND ($liga_ar) AND $fe_ar_ergebnisse == 1 ) { 
+	if ($clm_version >= $min_version) {
+		// Testen, ob Benutzer in meldebereiten Paarungen als Staffelleiter eingetragen ist - schon im helper erledigt
+		$t_input_result_ar = 0;
+		$a_paar = array();
+		foreach ($liga_ar as $liga_art) {
+			$params_ar = new clm_class_params($liga_art->params);
+			$params_fe_ar_ergebnisse = $params_ar->get('fe_ar_ergebnisse',0);
+			if ($params_fe_ar_ergebnisse == 1) {
+			// Wenn NICHT gemeldet oder noch Zeit zu korrigieren dann Runde anzeigen
+			$mdt = $liga_art->deadlineday.' ';
+			$mdt .= $liga_art->deadlinetime;
+			if (($liga_art->gemeldet < 1 OR $mdt >= $now) AND ($liga_art->liste > 0 OR ($liga_art->rang > 0 AND isset($liga_art->gid)))) {
+				$t_input_result_ar = 1;
+				if (!isset($a_paar[$liga_art->lid][$liga_art->dg][$liga_art->runde]))  $a_paar[$liga_art->lid][$liga_art->dg][$liga_art->runde] = 'p'.(string) $liga_art->paar;
+				else  $a_paar[$liga_art->lid][$liga_art->dg][$liga_art->runde] .= 'p'.(string) $liga_art->paar;
+			}}
+		}
+ 		if ($t_input_result_ar == 1) { ?>
+ <button class="tablinks" onclick="openFunction(event, 'input_result_ar')"><?php echo JText::_('MOD_CLM_LOG_INPUT_RESULT_AR') ?></button><br />
+		<?php }  
+	}
+	} ?>
+	
+<?php
  	if ($usertype != 'spl' AND $conf_vereinsdaten == 1 AND $par_vereinsdaten == 1) {   
 			if (!is_null($data[0]->zps) AND $data[0]->zps > '0') { ?>
   <button class="tablinks" onclick="openFunction(event, 'change_clubdata')"><?php echo JText::_('MOD_CLM_LOG_CHANGE_CLUBDATA') ?></button><br />
@@ -382,6 +410,47 @@ function openFunction(evt, clmFunction) {
 //					echo "<b><br>".$liga->name; if ($params->get('klasse') == 1) { echo ' - '.$liga->lname; } echo '</b><br/>'; 
 					$oln = $liga_slt->name;
 					$oll = $liga_slt->lname;
+				}
+			}
+			}	
+		} ?>
+</div>
+
+<div id="input_result_ar" class="tabcontent">
+	<?php
+	$c_lid = 0; $c_dg = 0; $c_runde = 0;
+	$oll = "";
+	$oln = "";
+		foreach ($liga_ar as $liga_art) {
+			$params_ar = new clm_class_params($liga_art->params);
+			$params_fe_ar_ergebnisse = $params_ar->get('fe_ar_ergebnisse',0);
+			if ($params_fe_ar_ergebnisse == 1) { 
+			// Wenn NICHT gemeldet oder noch Zeit zu korrigieren dann Runde anzeigen
+			$mdt = $liga_art->deadlineday.' ';
+			$mdt .= $liga_art->deadlinetime;
+			if (($liga_art->gemeldet < 1 OR $mdt >= $now)) {
+					if ($c_lid != $liga_art->lid OR $c_dg != $liga_art->dg OR $c_runde != $liga_art->runde) {
+//						if (($liga->name != $oln) || ($liga->lname != $oll)) {
+							if ($liga_art->durchgang == 1) $dtext = ''; else $dtext = ' Dg: '.$liga_art->dg;
+							echo "<h5><br>".$liga_art->lname.$dtext.' Runde: '.$liga_art->runde.'</h5>'; 
+							$oln = $liga_art->name;
+							$oll = $liga_art->lname;
+//						}
+						$c_lid = $liga_art->lid; $c_dg = $liga_art->dg; $c_runde = $liga_art->runde;
+					}
+				if (isset($a_paar[$liga_art->lid][$liga_art->dg][$liga_art->runde])) $apaar = $a_paar[$liga_art->lid][$liga_art->dg][$liga_art->runde]; else $apaar = '0';
+			?>
+			<a class="link" href="index.php?option=com_clm&amp;view=meldung_sl&amp;saison=<?php echo $liga_art->sid;?>&amp;liga=<?php echo $liga_art->liga; ?>&amp;dg=<?php echo $liga_art->dg; ?>&amp;runde=<?php echo $liga_art->runde; ?>&amp;paar=<?php echo $liga_art->paar; ?>&amp;tln=<?php echo $liga_art->tln_nr; ?>&amp;apaar=<?php echo $apaar; ?>&amp;Itemid=<?php echo $itemid; ?>">
+				<?php echo $liga_art->name.' - '.$liga_art->gname; ?>
+			</a>
+			<br>
+<?php			//	}
+			} else {
+				if (($liga_art->name != $oln) || ($liga_art->lname != $oll)) {
+//					echo "<b><br>".$liga->name; if ($params->get('klasse') == 1) { echo ' - '.$liga->lname; } echo '</b><br/>Zur Zeit noch keine Meldung möglich.<br/>'; 
+//					echo "<b><br>".$liga->name; if ($params->get('klasse') == 1) { echo ' - '.$liga->lname; } echo '</b><br/>'; 
+					$oln = $liga_art->name;
+					$oll = $liga_art->lname;
 				}
 			}
 			}	

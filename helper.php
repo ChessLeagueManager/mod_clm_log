@@ -119,6 +119,61 @@ class modCLM_LogHelper
 	return $liga_sl;
 	}
 
+ public static function getLiga_AR($params)
+	{
+	global $mainframe;
+	$db		= JFactory::getDBO();
+	$user		= JFactory::getUser();
+	$jid 		= $user->get('id');
+
+	// Konfigurationsparameter auslesen
+	$config = clm_core::$db->config();
+	$meldung_verein	= $config->meldung_verein;
+	$meldung_heim	= $config->meldung_heim;
+
+	clm_core::$db->query("SET SQL_BIG_SELECTS=1");	
+
+	$query = "SELECT at.turnier "
+		." FROM #__clm_user as u"
+		." LEFT JOIN #__clm_saison as s ON s.id = u.sid "
+		." LEFT JOIN #__clm_arbiter_turnier as at ON at.fideid = u.fideid AND at.tkz = 't' "
+		." WHERE u.jid = ".$jid
+		." AND s.published = 1 AND s.archiv = 0 "
+		." AND (at.role = 'A01' OR at.role = 'A02' OR at.role = 'A05') ";
+	$db->setQuery( $query );
+	$liga_zar = $db->loadObjectList();
+
+	$liga_string = '';
+	foreach ($liga_zar as $zar1) {
+		if ($liga_string == '') $liga_string = $zar1->turnier;
+		else $liga_string .= ','.$zar1->turnier;
+	}	
+
+	$query = "SELECT l.rang,t.meldung,l.name as lname,p.sid,p.lid,p.runde,p.paar,p.dg,p.tln_nr,p.gegner,  "
+		." l.durchgang as durchgang, l.params, " 
+		." t.deadlineday, t.deadlinetime, t.name as rname, " 
+		." m.id,m.sid,m.name,m.liga,m.man_nr,m.published,p.gemeldet,mg.name as gname "
+		." , m.liste "
+		." FROM #__clm_liga as l"
+		." LEFT JOIN #__clm_rnd_man as p ON ( p.lid = l.id ) "
+		." LEFT JOIN #__clm_mannschaften as m ON ( m.liga = p.lid AND m.tln_nr = p.tln_nr ) "
+		." LEFT JOIN #__clm_mannschaften as mg ON ( mg.liga = p.lid AND mg.tln_nr = p.gegner ) "
+		." LEFT JOIN #__clm_runden_termine as t ON t.nr = (p.runde + (l.runden * (p.dg - 1))) AND t.liga = l.id " 
+		." WHERE (FIND_IN_SET(l.id, '".$liga_string."' ) > 0) "
+		." AND l.anzeige_ma = 0 AND l.rnd = 1 AND l.published = 1 "
+		." AND p.heim = 1 "
+		." AND m.man_nr > 0 "
+		." AND mg.man_nr > 0 "
+		." AND t.meldung = 1 AND t.published = 1 "
+		." ORDER BY l.id, p.dg ASC, p.runde ASC, p.paar "
+		;
+	$db->setQuery( $query );
+	$liga_ar = $db->loadObjectList();
+//echo "<br>ar"; var_dump($liga_ar);	//die();	
+
+	return $liga_ar;
+	}
+	
  public static function getMannschaften($params)
 	{
 	global $mainframe;
