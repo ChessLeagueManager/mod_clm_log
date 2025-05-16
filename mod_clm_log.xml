@@ -2,7 +2,7 @@
 <extension type="module" version="1.7.0" client="site" method="upgrade">
 	<name>CLM Login Modul</name>
 	<author>CLM Team</author>
-	<creationDate>10.04.2025</creationDate>
+	<creationDate>01.05.2025</creationDate>
 	<copyright>(C) 2008 - 2025 CLM Project All rights reserved.</copyright>
 	<license>GNU/GPL</license>
 	<authorEmail>fishpoke@fishpoke.de</authorEmail>
@@ -19,7 +19,7 @@
 		<ul type="square">
 		 <li><font color="red">Neu: Ergebniseingabe durch Staffelleiter im Frontend freischaltbar</font></li>
 		 <li><font color="red">Neu: Ergebniseingabe durch Schiedsrichter im Frontend freischaltbar</font></li>
-		 <li>Voraussetzung: Beta 4.2.4 oder höher der Hauptkomponente bzw. ab Testpaket 4.2.3c</li> 
+		 <li>Voraussetzung: Beta 4.2.4 oder höher der Hauptkomponente bzw. ab Testpaket 4.2.3d</li> 
 		</ul></br>
 		<p>Hinweise, Fehlermeldungen, Wünsche bitte über unser Forum</p>
 		]]>

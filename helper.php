@@ -133,20 +133,20 @@ class modCLM_LogHelper
 
 	clm_core::$db->query("SET SQL_BIG_SELECTS=1");	
 
-	$query = "SELECT at.turnier "
+	$query = "SELECT at.liga "
 		." FROM #__clm_user as u"
 		." LEFT JOIN #__clm_saison as s ON s.id = u.sid "
-		." LEFT JOIN #__clm_arbiter_turnier as at ON at.fideid = u.fideid AND at.tkz = 't' "
+		." LEFT JOIN #__clm_arbiter_turnier as at ON at.fideid = u.fideid AND at.liga > 0 "
 		." WHERE u.jid = ".$jid
 		." AND s.published = 1 AND s.archiv = 0 "
-		." AND (at.role = 'A01' OR at.role = 'A02' OR at.role = 'A05') ";
+		." AND at.trole = 'A' AND (at.role = 'CA' OR at.role = 'DCA' OR at.role = 'PO' OR at.role = 'SA' OR at.role = 'ASA' OR at.role = 'ACA') ";
 	$db->setQuery( $query );
 	$liga_zar = $db->loadObjectList();
 
 	$liga_string = '';
 	foreach ($liga_zar as $zar1) {
-		if ($liga_string == '') $liga_string = $zar1->turnier;
-		else $liga_string .= ','.$zar1->turnier;
+		if ($liga_string == '') $liga_string = $zar1->liga;
+		else $liga_string .= ','.$zar1->liga;
 	}	
 
 	$query = "SELECT l.rang,t.meldung,l.name as lname,p.sid,p.lid,p.runde,p.paar,p.dg,p.tln_nr,p.gegner,  "
