@@ -380,23 +380,34 @@ function openFunction(evt, clmFunction) {
 	$c_lid = 0; $c_dg = 0; $c_runde = 0;
 	$oll = "";
 	$oln = "";
-		foreach ($liga_sl as $liga_slt) {
-			$params_sl = new clm_class_params($liga_slt->params);
-			$params_fe_sl_ergebnisse = $params_sl->get('fe_sl_ergebnisse',0);
-			if ($params_fe_sl_ergebnisse == 1) { 
-			// Wenn NICHT gemeldet oder noch Zeit zu korrigieren dann Runde anzeigen
+	$a_unfit = array();
+	$e_unfit = array(); $ie = 0;
+	foreach ($liga_sl as $liga_slt) {
+		$params_sl = new clm_class_params($liga_slt->params);
+		$params_fe_sl_ergebnisse = $params_sl->get('fe_sl_ergebnisse',0);
+		if ($params_fe_sl_ergebnisse == 1) { 
 			$mdt = $liga_slt->deadlineday.' ';
 			$mdt .= $liga_slt->deadlinetime;
-			if (($liga_slt->gemeldet < 1 OR $mdt >= $now)) {
-					if ($c_lid != $liga_slt->lid OR $c_dg != $liga_slt->dg OR $c_runde != $liga_slt->runde) {
-//						if (($liga->name != $oln) || ($liga->lname != $oll)) {
-							if ($liga_slt->durchgang == 1) $dtext = ''; else $dtext = ' Dg: '.$liga_slt->dg;
-							echo "<h5><br>".$liga_slt->lname.$dtext.' Runde: '.$liga_slt->runde.'</h5>'; 
-							$oln = $liga_slt->name;
-							$oll = $liga_slt->lname;
-//						}
-						$c_lid = $liga_slt->lid; $c_dg = $liga_slt->dg; $c_runde = $liga_slt->runde;
-					}
+			// Wenn NICHT gemeldet und entweder keine Deadline angegeben oder diese bereits überschritten ist
+			if (($liga_slt->gemeldet < 1) AND ($mdt <= '1970-01-0124:00:00' OR $mdt < $now)) {
+				if (isset($a_unfit[$liga_slt->lid][$liga_slt->dg][$liga_slt->runde])) continue;
+				$ie++;
+				if ($liga_slt->durchgang == 1) $dtext = ''; else $dtext = ' Dg: '.$liga_slt->dg;
+				$htext = $liga_slt->lname.$dtext.' Runde: '.$liga_slt->runde; 
+				$a_unfit[$liga_slt->lid][$liga_slt->dg][$liga_slt->runde] = $htext;
+				$b_unfit[$ie] = new stdClass();
+				$b_unfit[$ie]->htext = $htext;
+			// Wenn NICHT gemeldet oder noch Zeit zu korrigieren dann Runde anzeigen
+			} elseif (($liga_slt->gemeldet < 1 OR $mdt >= $now)) {
+				if ($c_lid != $liga_slt->lid OR $c_dg != $liga_slt->dg OR $c_runde != $liga_slt->runde) {
+//					if (($liga->name != $oln) || ($liga->lname != $oll)) {
+					if ($liga_slt->durchgang == 1) $dtext = ''; else $dtext = ' Dg: '.$liga_slt->dg;
+						echo "<h5><br>".$liga_slt->lname.$dtext.' Runde: '.$liga_slt->runde.'</h5>'; 
+						$oln = $liga_slt->name;
+						$oll = $liga_slt->lname;
+//					}
+					$c_lid = $liga_slt->lid; $c_dg = $liga_slt->dg; $c_runde = $liga_slt->runde;
+				}
 				if (isset($a_paar[$liga_slt->lid][$liga_slt->dg][$liga_slt->runde])) $apaar = $a_paar[$liga_slt->lid][$liga_slt->dg][$liga_slt->runde]; else $apaar = '0';
 			?>
 			<a class="link" href="index.php?option=com_clm&amp;view=meldung_sl&amp;saison=<?php echo $liga_slt->sid;?>&amp;liga=<?php echo $liga_slt->liga; ?>&amp;dg=<?php echo $liga_slt->dg; ?>&amp;runde=<?php echo $liga_slt->runde; ?>&amp;paar=<?php echo $liga_slt->paar; ?>&amp;tln=<?php echo $liga_slt->tln_nr; ?>&amp;apaar=<?php echo $apaar; ?>&amp;Itemid=<?php echo $itemid; ?>">
@@ -412,8 +423,12 @@ function openFunction(evt, clmFunction) {
 					$oll = $liga_slt->lname;
 				}
 			}
-			}	
-		} ?>
+		}
+	}
+	foreach ($b_unfit as $unfit) {
+		echo "<br>".$unfit->htext." - Deadline ungeeignet für schrittweise Erg.eingabe";
+	}	
+?>
 </div>
 
 <div id="input_result_ar" class="tabcontent">
@@ -421,23 +436,34 @@ function openFunction(evt, clmFunction) {
 	$c_lid = 0; $c_dg = 0; $c_runde = 0;
 	$oll = "";
 	$oln = "";
-		foreach ($liga_ar as $liga_art) {
-			$params_ar = new clm_class_params($liga_art->params);
-			$params_fe_ar_ergebnisse = $params_ar->get('fe_ar_ergebnisse',0);
-			if ($params_fe_ar_ergebnisse == 1) { 
-			// Wenn NICHT gemeldet oder noch Zeit zu korrigieren dann Runde anzeigen
+	$a_unfit = array();
+	$e_unfit = array(); $ie = 0;
+	foreach ($liga_ar as $liga_art) {
+		$params_ar = new clm_class_params($liga_art->params);
+		$params_fe_ar_ergebnisse = $params_ar->get('fe_ar_ergebnisse',0);
+		if ($params_fe_ar_ergebnisse == 1) { 
 			$mdt = $liga_art->deadlineday.' ';
 			$mdt .= $liga_art->deadlinetime;
-			if (($liga_art->gemeldet < 1 OR $mdt >= $now)) {
-					if ($c_lid != $liga_art->lid OR $c_dg != $liga_art->dg OR $c_runde != $liga_art->runde) {
-//						if (($liga->name != $oln) || ($liga->lname != $oll)) {
-							if ($liga_art->durchgang == 1) $dtext = ''; else $dtext = ' Dg: '.$liga_art->dg;
-							echo "<h5><br>".$liga_art->lname.$dtext.' Runde: '.$liga_art->runde.'</h5>'; 
-							$oln = $liga_art->name;
-							$oll = $liga_art->lname;
-//						}
-						$c_lid = $liga_art->lid; $c_dg = $liga_art->dg; $c_runde = $liga_art->runde;
-					}
+			// Wenn NICHT gemeldet und entweder keine Deadline angegeben oder diese bereits überschritten ist
+			if (($liga_art->gemeldet < 1) AND ($mdt <= '1970-01-0124:00:00' OR $mdt < $now)) {
+				if (isset($a_unfit[$liga_art->lid][$liga_art->dg][$liga_art->runde])) continue;
+				$ie++;
+				if ($liga_art->durchgang == 1) $dtext = ''; else $dtext = ' Dg: '.$liga_art->dg;
+				$htext = $liga_art->lname.$dtext.' Runde: '.$liga_art->runde; 
+				$a_unfit[$liga_art->lid][$liga_art->dg][$liga_art->runde] = $htext;
+				$b_unfit[$ie] = new stdClass();
+				$b_unfit[$ie]->htext = $htext;
+			// Wenn NICHT gemeldet oder noch Zeit zu korrigieren dann Runde anzeigen
+			} elseif ($liga_art->gemeldet < 1 OR $mdt >= $now) {
+				if ($c_lid != $liga_art->lid OR $c_dg != $liga_art->dg OR $c_runde != $liga_art->runde) {
+//					if (($liga->name != $oln) || ($liga->lname != $oll)) {
+					if ($liga_art->durchgang == 1) $dtext = ''; else $dtext = ' Dg: '.$liga_art->dg;
+						echo "<h5><br>".$liga_art->lname.$dtext.' Runde: '.$liga_art->runde.'</h5>'; 
+						$oln = $liga_art->name;
+						$oll = $liga_art->lname;
+//					}
+					$c_lid = $liga_art->lid; $c_dg = $liga_art->dg; $c_runde = $liga_art->runde;
+				}
 				if (isset($a_paar[$liga_art->lid][$liga_art->dg][$liga_art->runde])) $apaar = $a_paar[$liga_art->lid][$liga_art->dg][$liga_art->runde]; else $apaar = '0';
 			?>
 			<a class="link" href="index.php?option=com_clm&amp;view=meldung_sl&amp;saison=<?php echo $liga_art->sid;?>&amp;liga=<?php echo $liga_art->liga; ?>&amp;dg=<?php echo $liga_art->dg; ?>&amp;runde=<?php echo $liga_art->runde; ?>&amp;paar=<?php echo $liga_art->paar; ?>&amp;tln=<?php echo $liga_art->tln_nr; ?>&amp;apaar=<?php echo $apaar; ?>&amp;Itemid=<?php echo $itemid; ?>">
@@ -453,8 +479,12 @@ function openFunction(evt, clmFunction) {
 					$oll = $liga_art->lname;
 				}
 			}
-			}	
-		} ?>
+		}	
+	}
+	foreach ($b_unfit as $unfit) {
+		echo "<br>".$unfit->htext." - Deadline ungeeignet für schrittweise Erg.eingabe";
+	}	
+?>
 </div>
 
 <div id="change_clubdata" class="tabcontent">

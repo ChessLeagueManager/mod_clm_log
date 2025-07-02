@@ -2,12 +2,12 @@
 <extension type="module" version="1.7.0" client="site" method="upgrade">
 	<name>CLM Login Modul</name>
 	<author>CLM Team</author>
-	<creationDate>01.05.2025</creationDate>
+	<creationDate>02.06.2025</creationDate>
 	<copyright>(C) 2008 - 2025 CLM Project All rights reserved.</copyright>
 	<license>GNU/GPL</license>
 	<authorEmail>fishpoke@fishpoke.de</authorEmail>
 	<authorUrl>www.chessleaguemanager.de</authorUrl>
-	<version>4.2.5</version>
+	<version>4.2.5a</version>
 	<description>
 		<![CDATA[
 		<h3>Chess League Manager : Login Modul</h3>
