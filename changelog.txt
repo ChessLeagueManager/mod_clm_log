@@ -11,7 +11,7 @@ $ -> Language fix or change
 - -> Removed
 ! -> Note
 
-- - - - - 4.2.5a - [02-06-2025] - - - - - - - - - - - - - - - - - - - -
+- - - - - 4.2.6 - [02-06-2025] - - - - - - - - - - - - - - - - - - - -
 ^ Ergebniseingabe: mehrfach angestrebt, aber 'Meldedatum bis' nicht gesetzt oder abgelaufen
 
 - - - - - 4.2.5 - [10-04-2025] - - - - - - - - - - - - - - - - - - - -
