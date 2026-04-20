@@ -1,20 +1,22 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Login Modul 
- * @Copyright (C) 2008-2025 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2026 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
- * @link http://www.chessleaguemanager.de
+ * @link https://chessleaguemanager.org
 */
 // no direct access
 defined('_JEXEC') or die('Restricted access');
+
+use Joomla\CMS\Factory;
 
 class modCLM_LogHelper
 {
  public static function getData($params)
 	{
 	global $mainframe;
-	$db		= JFactory::getDBO();
-	$user		=  JFactory::getUser();
+	$db		= Factory::getDBO();
+	$user		=  Factory::getUser();
 	$jid		= $user->get('id');
 
 	$query = " SELECT a.*, u.name as typ, v.name as vname"
@@ -34,8 +36,8 @@ class modCLM_LogHelper
  public static function getLiga($params)
 	{
 	global $mainframe;
-	$db		= JFactory::getDBO();
-	$user		= JFactory::getUser();
+	$db		= Factory::getDBO();
+	$user		= Factory::getUser();
 	$jid 		= $user->get('id');
 
 	// Konfigurationsparameter auslesen
@@ -80,8 +82,8 @@ class modCLM_LogHelper
  public static function getLiga_SL($params)
 	{
 	global $mainframe;
-	$db		= JFactory::getDBO();
-	$user		= JFactory::getUser();
+	$db		= Factory::getDBO();
+	$user		= Factory::getUser();
 	$jid 		= $user->get('id');
 
 	// Konfigurationsparameter auslesen
@@ -122,8 +124,8 @@ class modCLM_LogHelper
  public static function getLiga_AR($params)
 	{
 	global $mainframe;
-	$db		= JFactory::getDBO();
-	$user		= JFactory::getUser();
+	$db		= Factory::getDBO();
+	$user		= Factory::getUser();
 	$jid 		= $user->get('id');
 
 	// Konfigurationsparameter auslesen
@@ -177,8 +179,8 @@ class modCLM_LogHelper
  public static function getMannschaften($params)
 	{
 	global $mainframe;
-	$db	= JFactory::getDBO();
-	$user	= JFactory::getUser();
+	$db	= Factory::getDBO();
+	$user	= Factory::getUser();
 	$jid 	= $user->get('id');
 
 	// Konfigurationsparameter auslesen
@@ -204,8 +206,8 @@ class modCLM_LogHelper
  public static function getMeldeliste($params)
 	{
 	global $mainframe;
-	$db		= JFactory::getDBO();
-	$user		= JFactory::getUser();
+	$db		= Factory::getDBO();
+	$user		= Factory::getUser();
 	$jid 		= $user->get('id');
 
 	//$query = " SELECT m.liste, m.man_nr, m.name, m.sid, m.zps, l.name AS liganame, m.liga as lid"
@@ -230,8 +232,8 @@ class modCLM_LogHelper
  public static function getRangliste(&$params)
 	{
 	global $mainframe;
-	$db			= JFactory::getDBO();
-	$user			= JFactory::getUser();
+	$db			= Factory::getDBO();
+	$user			= Factory::getUser();
 	$jid =  $user->get('id');
 
 	$query = "SELECT zps FROM #__clm_user as u"

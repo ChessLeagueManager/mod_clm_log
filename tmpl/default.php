@@ -1,15 +1,18 @@
 <?php 
 /**
  * @ Chess League Manager (CLM) Login Modul 
- * @Copyright (C) 2008-2025 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2026 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
- * @link http://www.chessleaguemanager.de
+ * @link https://chessleaguemanager.org
 */
 // no direct access
 defined('_JEXEC') or die('Restricted access'); 
 
+use Joomla\CMS\Factory;
+use Joomla\CMS\Language\Text;
+
 	function getParam($name) {
-		$db = JFactory::getDbo();
+		$db = Factory::getDbo();
 		$db->setQuery('SELECT manifest_cache FROM #__extensions WHERE element = "com_clm"');
 		$manifest = json_decode($db->loadResult(), true);
 		return $manifest[$name];
@@ -98,10 +101,10 @@ Ihr Account ist noch nicht aktiviert oder wurde von einem Administrator gesperrt
 // Check Mitglied DSB/ECF
 elseif ($conf_user_member == 1 AND $ucheck[0] === false AND $data[0]->org_exc == '0') {
 // Ihre Mitgliedschaft in der Schachorganisation kann nicht überprüft werden! 
-	echo JText::_('E_CLM_BERECHTIGUNG').'<br><br>';
-	echo JText::_($ucheck[1]);
+	echo Text::_('E_CLM_BERECHTIGUNG').'<br><br>';
+	echo Text::_($ucheck[1]);
 	$name = 'keine CLM-Berechtigung';
-	$content = str_replace ("<br>", " - ", JText::_($ucheck[1]));
+	$content = str_replace ("<br>", " - ", Text::_($ucheck[1]));
 	clm_core::addInfo($name,$content);
 } 
 	// Published OK !
@@ -186,9 +189,9 @@ function openFunction(evt, clmFunction) {
 
 <div class="tab">
 <?php if ($vversion > getParam('version')) { ?>
-  <button class="tablinks" onclick="openFunction(event, 'overview')"><?php echo JText::_('MOD_CLM_LOG_OVERVIEW') ?></button><br />
+  <button class="tablinks" onclick="openFunction(event, 'overview')"><?php echo Text::_('MOD_CLM_LOG_OVERVIEW') ?></button><br />
 <?php } else { ?>
-  <button class="tablinks" onclick="openFunction(event, 'contact')"><?php echo JText::_('MOD_CLM_LOG_CONTACT') ?></button><br />
+  <button class="tablinks" onclick="openFunction(event, 'contact')"><?php echo Text::_('MOD_CLM_LOG_CONTACT') ?></button><br />
 <?php } ?>
 
 <?php 	   	  
@@ -203,7 +206,7 @@ function openFunction(evt, clmFunction) {
 			}
 		}
  		if ($t_input_result == 1) { ?>
-  <button class="tablinks" onclick="openFunction(event, 'input_result')"><?php echo JText::_('MOD_CLM_LOG_INPUT_RESULT') ?></button><br />
+  <button class="tablinks" onclick="openFunction(event, 'input_result')"><?php echo Text::_('MOD_CLM_LOG_INPUT_RESULT') ?></button><br />
 		<?php } 
 	} ?>
 		
@@ -229,7 +232,7 @@ function openFunction(evt, clmFunction) {
 			}}
 		}
  		if ($t_input_result_sl == 1) { ?>
- <button class="tablinks" onclick="openFunction(event, 'input_result_sl')"><?php echo JText::_('MOD_CLM_LOG_INPUT_RESULT_SL') ?></button><br />
+ <button class="tablinks" onclick="openFunction(event, 'input_result_sl')"><?php echo Text::_('MOD_CLM_LOG_INPUT_RESULT_SL') ?></button><br />
 		<?php }  
 	}
 	} ?>
@@ -256,7 +259,7 @@ function openFunction(evt, clmFunction) {
 			}}
 		}
  		if ($t_input_result_ar == 1) { ?>
- <button class="tablinks" onclick="openFunction(event, 'input_result_ar')"><?php echo JText::_('MOD_CLM_LOG_INPUT_RESULT_AR') ?></button><br />
+ <button class="tablinks" onclick="openFunction(event, 'input_result_ar')"><?php echo Text::_('MOD_CLM_LOG_INPUT_RESULT_AR') ?></button><br />
 		<?php }  
 	}
 	} ?>
@@ -264,7 +267,7 @@ function openFunction(evt, clmFunction) {
 <?php
  	if ($usertype != 'spl' AND $conf_vereinsdaten == 1 AND $par_vereinsdaten == 1) {   
 			if (!is_null($data[0]->zps) AND $data[0]->zps > '0') { ?>
-  <button class="tablinks" onclick="openFunction(event, 'change_clubdata')"><?php echo JText::_('MOD_CLM_LOG_CHANGE_CLUBDATA') ?></button><br />
+  <button class="tablinks" onclick="openFunction(event, 'change_clubdata')"><?php echo Text::_('MOD_CLM_LOG_CHANGE_CLUBDATA') ?></button><br />
 	<?php } } ?>
 <?php 	
 	if ($conf_meldeliste == 1 AND $meldeliste) {
@@ -291,7 +294,7 @@ function openFunction(evt, clmFunction) {
 			}
 		}
 		if ($usertype != 'spl' AND $t_meldeliste == 1) { ?>
-  <button class="tablinks" onclick="openFunction(event, 'input_teamlineup')"><?php echo JText::_('MOD_CLM_LOG_INPUT_TEAMLINEUP') ?></button><br />
+  <button class="tablinks" onclick="openFunction(event, 'input_teamlineup')"><?php echo Text::_('MOD_CLM_LOG_INPUT_TEAMLINEUP') ?></button><br />
 		<?php } 
 	} ?>
 
@@ -320,21 +323,21 @@ function openFunction(evt, clmFunction) {
 			}
 		}
 		if ($usertype != 'spl' AND $t_rangliste == 1) { ?>
-  <button class="tablinks" onclick="openFunction(event, 'input_clublineup')"><?php echo JText::_('MOD_CLM_LOG_INPUT_CLUBLINEUP') ?></button><br />
+  <button class="tablinks" onclick="openFunction(event, 'input_clublineup')"><?php echo Text::_('MOD_CLM_LOG_INPUT_CLUBLINEUP') ?></button><br />
 		<?php } 
 	} ?>
 </div>
 
 <div id="overview" class="tabcontent">
-	<b><?php echo "<br>".JText::_('MOD_CLM_LOG_HELLO')." ".$data[0]->name.' !' ?></b>
+	<b><?php echo "<br>".Text::_('MOD_CLM_LOG_HELLO')." ".$data[0]->name.' !' ?></b>
 </div>
 
 <div id="contact" class="tabcontent">
-	<b><?php echo "<br>".JText::_('MOD_CLM_LOG_CONTACT')." ".$data[0]->name ?></b><br/>
-        <?php if($data[0]->tel_fest == "") { $nr=JText::_("MOD_CLM_LOG_CONTACT_UNPROVIDED"); } else { $nr=$data[0]->tel_fest; } echo JText::_("MOD_CLM_LOG_CONTACT_WIRED") . " ".$nr; ?><br/>
-        <?php if($data[0]->tel_mobil == "") { $nr=JText::_("MOD_CLM_LOG_CONTACT_UNPROVIDED"); } else { $nr=$data[0]->tel_mobil; } echo JText::_("MOD_CLM_LOG_CONTACT_MOBILE") . " ".$nr; ?><br/>
-        <?php echo JText::_("MOD_CLM_LOG_CONTACT_EMAIL") . " ".$data[0]->email; ?><br/>
-        <a class="link" href="index.php?option=com_clm&amp;view=contact"><?php echo JText::_("MOD_CLM_LOG_CONTACT_UPDATE"); ?></a>
+	<b><?php echo "<br>".Text::_('MOD_CLM_LOG_CONTACT')." ".$data[0]->name ?></b><br/>
+        <?php if($data[0]->tel_fest == "") { $nr=Text::_("MOD_CLM_LOG_CONTACT_UNPROVIDED"); } else { $nr=$data[0]->tel_fest; } echo Text::_("MOD_CLM_LOG_CONTACT_WIRED") . " ".$nr; ?><br/>
+        <?php if($data[0]->tel_mobil == "") { $nr=Text::_("MOD_CLM_LOG_CONTACT_UNPROVIDED"); } else { $nr=$data[0]->tel_mobil; } echo Text::_("MOD_CLM_LOG_CONTACT_MOBILE") . " ".$nr; ?><br/>
+        <?php echo Text::_("MOD_CLM_LOG_CONTACT_EMAIL") . " ".$data[0]->email; ?><br/>
+        <a class="link" href="index.php?option=com_clm&amp;view=contact"><?php echo Text::_("MOD_CLM_LOG_CONTACT_UPDATE"); ?></a>
 </div>
 
 <div id="input_result" class="tabcontent">
@@ -488,7 +491,7 @@ function openFunction(evt, clmFunction) {
 </div>
 
 <div id="change_clubdata" class="tabcontent">
-	<b><?php echo "<br>".JText::_('MOD_CLM_LOG_CHANGE_CLUBDATA'); ?></b><br/>
+	<b><?php echo "<br>".Text::_('MOD_CLM_LOG_CHANGE_CLUBDATA'); ?></b><br/>
 		<div>
 		<a href="index.php?option=com_clm&view=verein&saison=<?php echo $data[0]->sid; ?>&zps=<?php echo $data[0]->zps; ?>&layout=vereinsdaten&amp;Itemid=<?php echo $itemid; ?>"><?php echo $data[0]->vname; ?></a>
 		</div>

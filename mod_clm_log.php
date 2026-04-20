@@ -1,18 +1,22 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Login Modul 
- * @Copyright (C) 2008-2025 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2026 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
- * @link http://www.chessleaguemanager.de
+ * @link https://chessleaguemanager.org
 */
 
 // no direct access
 defined('_JEXEC') or die('Restricted access');
 
+use Joomla\CMS\Factory;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\Helper\ModuleHelper;
+
 // Konfiguration wird benötigt
 require_once (JPATH_SITE . DIRECTORY_SEPARATOR . "components" . DIRECTORY_SEPARATOR . "com_clm" . DIRECTORY_SEPARATOR . "clm" . DIRECTORY_SEPARATOR . "index.php");
 
-$user = JFactory::getUser();
+$user = Factory::getUser();
 
 // angemeldet
 if ($user->get('id')) {
@@ -28,8 +32,8 @@ $liga_ar	= modCLM_LogHelper::getLiga_AR($params);
 $meldeliste	= modCLM_LogHelper::getMeldeliste($params);
 $rangliste	= modCLM_LogHelper::getRangliste($params);
 
-require(JModuleHelper::getLayoutPath('mod_clm_log'));
+require(ModuleHelper::getLayoutPath('mod_clm_log'));
 }
 // NICHT angemeldet
 else 
-{ echo "<p>".JText::_('MOD_CLM_LOG_INFO')."</p>";}
+{ echo "<p>".Text::_('MOD_CLM_LOG_INFO')."</p>";}

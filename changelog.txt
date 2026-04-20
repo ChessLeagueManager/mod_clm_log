@@ -11,6 +11,9 @@ $ -> Language fix or change
 - -> Removed
 ! -> Note
 
+- - - - - 5.0.0 - [11-04-2026] - - - - - - - - - - - - - - - - - - - -
+^ Anpassung Joomla 6
+
 - - - - - 4.2.6 - [02-06-2025] - - - - - - - - - - - - - - - - - - - -
 ^ Ergebniseingabe: mehrfach angestrebt, aber 'Meldedatum bis' nicht gesetzt oder abgelaufen
 

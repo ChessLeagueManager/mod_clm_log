@@ -1,25 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
-<extension type="module" version="1.7.0" client="site" method="upgrade">
+<extension type="module" version="4.0.0" client="site" method="upgrade">
 	<name>CLM Login Modul</name>
 	<author>CLM Team</author>
-	<creationDate>02.06.2025</creationDate>
-	<copyright>(C) 2008 - 2025 CLM Project All rights reserved.</copyright>
+	<creationDate>11.04.2026</creationDate>
+	<copyright>(C) 2008 - 2026 CLM Project All rights reserved.</copyright>
 	<license>GNU/GPL</license>
 	<authorEmail>fishpoke@fishpoke.de</authorEmail>
 	<authorUrl>www.chessleaguemanager.de</authorUrl>
-	<version>4.2.6</version>
+	<version>5.0.0</version>
 	<description>
 		<![CDATA[
 		<h3>Chess League Manager : Login Modul</h3>
 		<p>Das Modul, welches die Frontend Funktionen für registrierte Nutzer der CLM Komponente zur Verfügung stellt.</p>
 		<p>&copy; CLM Team </p>	 	
-		<p><a href="https://www.chessleaguemanager.de" target="_blank">CLM Projekt Homepage</a>  |  <a href="https://www.chessleaguemanager.de/index.php?option=com_kunena" target="blank">Support Forum</a></p>
+		 <a href="https://joomla.chessleaguemanager.org" target="blank">CLM Projekt Homepage</a>  |  <a href="https://joomla.chessleaguemanager.org/index.php/kunena" target="blank">Support Forum</a>
 		<br><br>
-		<u>Das Wichtigste zur neuen Version 4.2.5 :</u>
+		<u>Das Wichtigste zur neuen Version 5.0.0 :</u>
 		<ul type="square">
-		 <li><font color="red">Neu: Ergebniseingabe durch Staffelleiter im Frontend freischaltbar</font></li>
-		 <li><font color="red">Neu: Ergebniseingabe durch Schiedsrichter im Frontend freischaltbar</font></li>
-		 <li>Voraussetzung: Beta 4.2.4 oder höher der Hauptkomponente bzw. ab Testpaket 4.2.3d</li> 
+		 <li><font color="red">Anpassung Joomla 6</font></li>
+		 <li>Paket ist geeignet für J 4.x, J 5.x und J 6.x</li>
 		</ul></br>
 		<p>Hinweise, Fehlermeldungen, Wünsche bitte über unser Forum</p>
 		]]>
