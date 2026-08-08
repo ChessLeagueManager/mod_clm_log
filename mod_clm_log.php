@@ -31,6 +31,7 @@ $liga_sl	= modCLM_LogHelper::getLiga_SL($params);
 $liga_ar	= modCLM_LogHelper::getLiga_AR($params);
 $meldeliste	= modCLM_LogHelper::getMeldeliste($params);
 $rangliste	= modCLM_LogHelper::getRangliste($params);
+$mfliste	= modCLM_LogHelper::getMFListe($params);
 
 require(ModuleHelper::getLayoutPath('mod_clm_log'));
 }

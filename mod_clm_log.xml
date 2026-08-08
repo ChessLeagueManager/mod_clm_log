@@ -2,12 +2,12 @@
 <extension type="module" version="4.0.0" client="site" method="upgrade">
 	<name>CLM Login Modul</name>
 	<author>CLM Team</author>
-	<creationDate>11.04.2026</creationDate>
+	<creationDate>06.08.2026</creationDate>
 	<copyright>(C) 2008 - 2026 CLM Project All rights reserved.</copyright>
 	<license>GNU/GPL</license>
 	<authorEmail>fishpoke@fishpoke.de</authorEmail>
 	<authorUrl>www.chessleaguemanager.de</authorUrl>
-	<version>5.0.0</version>
+	<version>5.0.1</version>
 	<description>
 		<![CDATA[
 		<h3>Chess League Manager : Login Modul</h3>
@@ -15,10 +15,9 @@
 		<p>&copy; CLM Team </p>	 	
 		 <a href="https://joomla.chessleaguemanager.org" target="blank">CLM Projekt Homepage</a>  |  <a href="https://joomla.chessleaguemanager.org/index.php/kunena" target="blank">Support Forum</a>
 		<br><br>
-		<u>Das Wichtigste zur neuen Version 5.0.0 :</u>
+		<u>Das Wichtigste zur neuen Version 5.0.1 :</u>
 		<ul type="square">
-		 <li><font color="red">Anpassung Joomla 6</font></li>
-		 <li>Paket ist geeignet für J 4.x, J 5.x und J 6.x</li>
+		 <li><font color="red">&Auml;nderung von Mannschaftsdaten im Frontend</font></li>
 		</ul></br>
 		<p>Hinweise, Fehlermeldungen, Wünsche bitte über unser Forum</p>
 		]]>

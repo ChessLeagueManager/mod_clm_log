@@ -20,6 +20,9 @@ use Joomla\CMS\Language\Text;
 
 // Mindest-Version der Hauptkomponente für Kontaktdatenpflege
 $vversion = "4.1.0b";
+// Mindest-Version der Hauptkomponente für Mannschaftsführer-Pflege
+$mfversion = "5.0.0a";
+
 function user_check($zps = - 1, $pkz = - 1, $mgl_nr = -1) {
 	@set_time_limit(0); // hope
 	$counter = 0;
@@ -186,13 +189,14 @@ function openFunction(evt, clmFunction) {
 }
 </script>
 
-
 <div class="tab">
 <?php if ($vversion > getParam('version')) { ?>
   <button class="tablinks" onclick="openFunction(event, 'overview')"><?php echo Text::_('MOD_CLM_LOG_OVERVIEW') ?></button><br />
 <?php } else { ?>
   <button class="tablinks" onclick="openFunction(event, 'contact')"><?php echo Text::_('MOD_CLM_LOG_CONTACT') ?></button><br />
-<?php } ?>
+<?php if ($mfversion < getParam('version')) { ?>
+  <button class="tablinks" onclick="openFunction(event, 'change_mfdata')"><?php echo Text::_('MOD_CLM_LOG_MFDATA') ?></button><br />
+<?php } } ?>
 
 <?php 	   	  
 	if ($usertype != 'spl' AND ($liga)) { 
@@ -497,6 +501,13 @@ function openFunction(evt, clmFunction) {
 		</div>
 
 </div>
+
+<div id="change_mfdata" class="tabcontent">
+	<b><?php echo "<br>".Text::_('MOD_CLM_LOG_CHANGE_MFDATA'); ?></b><br/>
+	<?php foreach ($mfliste as $mannschaft) {?>
+	<a href="index.php?option=com_clm&view=mannschaft&saison=<?php echo $data[0]->sid; ?>&liga=<?php echo $mannschaft->liga; ?>&tlnr=<?php echo $mannschaft->tlnr;?>&zps=<?php echo $data[0]->zps; ?>&layout=mfdaten&amp;"><?php echo $mannschaft->name; ?></a><br />&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;<?php echo $mannschaft->mfname;?><br/><?php
+	}
+?></div>
 
 <div id="input_teamlineup" class="tabcontent">
 	<br>

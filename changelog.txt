@@ -11,6 +11,9 @@ $ -> Language fix or change
 - -> Removed
 ! -> Note
 
+- - - - - 5.0.1 - [06-08-2026] - - - - - - - - - - - - - - - - - - - -
++ Aenderung von Mannschaftsdaten im Frontend
+
 - - - - - 5.0.0 - [11-04-2026] - - - - - - - - - - - - - - - - - - - -
 ^ Anpassung Joomla 6
 
