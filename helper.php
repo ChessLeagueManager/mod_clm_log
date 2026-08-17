@@ -264,7 +264,7 @@ class modCLM_LogHelper {
 				." WHERE m.sid=cu.sid AND m.published = 1 AND cu.published = 1 "			// restrict to same saison and published
 				." AND m.sid = (SELECT id from #__clm_saison where archiv=0 and published=1) "		// restrict to current season
 				." AND cu.zps=m.zps AND m.mf = cu.jid "							// restrict to matching team and captain
-				." AND cu.zps = " . $zps->zps . " "							// restrict to teams of this user's club
+				." AND cu.zps = '" . $zps->zps . "' "							// restrict to teams of this user's club
 				." UNION SELECT m.id,m.name,m.mf,m.liga,m.tln_nr as tlnr,substr(m.name,0,0) as mfname "
 				." FROM #__clm_mannschaften m "
 				." WHERE m.published = 1 "								// restrict to same saison and published

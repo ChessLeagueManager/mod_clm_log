@@ -2,7 +2,7 @@
 <extension type="module" version="4.0.0" client="site" method="upgrade">
 	<name>CLM Login Modul</name>
 	<author>CLM Team</author>
-	<creationDate>06.08.2026</creationDate>
+	<creationDate>16.08.2026</creationDate>
 	<copyright>(C) 2008 - 2026 CLM Project All rights reserved.</copyright>
 	<license>GNU/GPL</license>
 	<authorEmail>fishpoke@fishpoke.de</authorEmail>
